@@ -528,8 +528,6 @@
   <section class="tracks" id="tracks">
     <div class="container">
       <div class="section-header">
-        <h2>Learning Tracks</h2>
-        <span class="section-tag">START HERE</span>
       </div>
       <div class="track-grid">
         <div class="track-card featured">
@@ -542,28 +540,6 @@
             <div class="meta-item">Hardware: <span>Basys3 FPGA (optional)</span></div>
           </div>
           <span class="track-arrow">→ projects/riscv-core</span>
-        </div>
-
-        <div class="track-card">
-          <span class="track-label label-intermediate">Intermediate</span>
-          <h3>NVDLA MAC Array</h3>
-          <p>Reimplement the convolution MAC array from NVIDIA's open-source Deep Learning Accelerator, resource-constrained to fit an Artix-7 FPGA. Understand how neural network hardware actually works at the silicon level.</p>
-          <div class="track-meta">
-            <div class="meta-item">Prereq: <span>RISC-V track</span></div>
-            <div class="meta-item">Ref: <span>NVDLA GitHub</span></div>
-          </div>
-          <span class="track-arrow">→ projects/nvdla-mac-array</span>
-        </div>
-
-        <div class="track-card">
-          <span class="track-label label-advanced">Advanced</span>
-          <h3>Chiplet NoC</h3>
-          <p>Design a network-on-chip interconnect for chiplet communication using the UCIe standard. This is the frontier of semiconductor architecture — modular, reusable silicon blocks that talk to each other on a silicon interposer.</p>
-          <div class="track-meta">
-            <div class="meta-item">Prereq: <span>Both tracks above</span></div>
-            <div class="meta-item">Standard: <span>UCIe</span></div>
-          </div>
-          <span class="track-arrow">→ projects/chiplet-noc</span>
         </div>
       </div>
     </div>
@@ -587,21 +563,8 @@
         <tbody>
           <tr>
             <td class="proj-name">riscv-core</td>
-            <td><span class="badge badge-b">Beginner</span></td>
             <td>RV32I processor — modules, pipelines, simulation</td>
             <td>Verilog, Vivado</td>
-          </tr>
-          <tr>
-            <td class="proj-name">nvdla-mac-array</td>
-            <td><span class="badge badge-i">Intermediate</span></td>
-            <td>Convolution MAC array based on NVIDIA NVDLA architecture</td>
-            <td>Verilog, Vivado, NVDLA reference</td>
-          </tr>
-          <tr>
-            <td class="proj-name">chiplet-noc</td>
-            <td><span class="badge badge-a">Advanced</span></td>
-            <td>Network-on-chip for multi-die chiplet interconnect</td>
-            <td>SystemVerilog, UCIe spec</td>
           </tr>
         </tbody>
       </table>
@@ -611,20 +574,10 @@
   <div class="container">
     <div class="info-grid" id="tools">
       <div class="info-card">
-        <h3>Tools & Resources</h3>
-        <ul class="info-list">
-          <li><strong>Vivado</strong> — Xilinx synthesis & simulation (free)</li>
-          <li><strong>ModelSim</strong> — HDL simulation</li>
-          <li><strong>Cadence</strong> — Professional EDA suite (member access)</li>
-          <li><strong>Tiny Tapeout</strong> — Actual silicon fabrication for students</li>
-          <li><strong>OpenLane</strong> — Open-source RTL-to-GDSII flow</li>
-        </ul>
-      </div>
-      <div class="info-card">
         <h3>Club Info</h3>
         <ul class="info-list">
           <li><strong>Prof. Kevin Cao</strong> — Faculty Advisor</li>
-          <li><strong>Prof. Claire Dietz</strong> — Faculty Advisor</li>
+          <li><strong>Claire Dietz</strong> — Faculty Advisor</li>
           <li><strong>Avyukt Raghuvanshi</strong> — President</li>
           <li><strong>Paulo Dietrich</strong> — Vice-President</li>
           <li><strong>Madeline Ngo</strong> — Treasurer</li>
