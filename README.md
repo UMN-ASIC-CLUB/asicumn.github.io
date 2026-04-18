@@ -34,7 +34,7 @@ Once you're comfortable with RTL basics, explore our **industry project repos** 
 - **Simulation & Synthesis:** Vivado (Xilinx), ModelSim
 - **Professional EDA:** Cadence (available to members)
 - **Fabrication:** Cleanroom training through UMN, Tiny Tapeout for actual silicon
-- **Reference Architectures:** [NVDLA](https://github.com/nvdla/hw), [PicoRV32](https://github.com/YosysHQ/picorv32), [CVA6](https://github.com/openhwgroup/cva6)
+- **Reference Architectures:** [PicoRV32](https://github.com/YosysHQ/picorv32), [CVA6](https://github.com/openhwgroup/cva6)
 
 ---
 
