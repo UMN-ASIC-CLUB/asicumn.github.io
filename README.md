@@ -25,8 +25,6 @@ Once you're comfortable with RTL basics, explore our **industry project repos** 
 | Project | Difficulty | Description |
 |---|---|---|
 | `riscv-core` | Beginner | RV32I processor core in Verilog, simulated in Vivado |
-| `nvdla-mac-array` | Intermediate | Reimplementation of NVIDIA's NVDLA convolution MAC array, resource-constrained for Artix-7 FPGA |
-| `chiplet-noc` | Advanced | Network-on-chip (NoC) interconnect for chiplet communication over UCIe |
 
 ---
 
@@ -42,16 +40,14 @@ Once you're comfortable with RTL basics, explore our **industry project repos** 
 
 ## Club Info
 
-**Faculty Advisors:** Prof. Kevin Cao · Prof. Claire Dietz  
+**Faculty Advisors:** Prof. Kevin Cao 
 **President:** Avyukt Raghuvanshi  
 **Vice-President:** Paulo Dietrich  
 **Treasurer:** Madeline Ngo  
 **Officers:** Ethan Chung, Talis Birmanis  
-**Meetings:** See the [Events tab](../../events) for schedule  
 **Open to:** All UMN ECE students, all experience levels
 
 **Contact:** umnasicclub@gmail.com 
-**Constitution:** [`CONSTITUTION.md`](./CONSTITUTION.md)
 
 ---
 
