@@ -2,21 +2,7 @@
 
 **University of Minnesota's home for semiconductor design — ASIC, FPGA, chiplet architecture, and beyond.**
 
-We exist to close the gap between ECE coursework and real hardware engineering. Whether you've never written a line of Verilog or you're already thinking about taping out, there's a project here for you.
-
----
-
-## Getting Started
-
-### New to hardware design?
-Start with our **RISC-V track** — a beginner-friendly path to learning RTL design from scratch. You'll implement a working RISC-V processor core in Verilog, simulate it, and understand how real CPUs are built from logic gates up.
-
-➜ [`projects/riscv-starter`](./projects/riscv-starter)
-
-### Ready for something more advanced?
-Once you're comfortable with RTL basics, explore our **industry project repos** — scaled-down reimplementations of real systems used at companies like NVIDIA and Jane Street. Pick the one that interests you and contribute.
-
-➜ [`projects/`](./projects)
+We exist to close the gap between ECE coursework and real hardware engineering.
 
 ---
 
@@ -41,7 +27,7 @@ Once you're comfortable with RTL basics, explore our **industry project repos** 
 ## Club Info
 
 **Faculty Advisors:** Prof. Kevin Cao 
-**President:** Avyukt Raghuvanshi  
+**President:** Avi Raghuvanshi  
 **Vice-President:** Paulo Dietrich  
 **Treasurer:** Madeline Ngo  
 **Officers:** Ethan Chung, Talis Birmanis  
