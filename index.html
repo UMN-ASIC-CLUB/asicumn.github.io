@@ -8,14 +8,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0a0a0f;
-      --surface: #111118;
-      --border: #1e1e2e;
-      --accent: #c8f53a;
-      --accent2: #3af5c8;
-      --text: #e8e8f0;
-      --muted: #6b6b80;
-      --gold: #f5c53a;
+      --bg: #0d0508;
+      --surface: #150a0d;
+      --border: #2e1018;
+      --accent: #7c1c2e;
+      --accent-bright: #b4102a;
+      --accent-hover: #d4122f;
+      --gold: #ffcc33;
+      --gold-dim: #c99a1a;
+      --gold-dark: #7a5e00;
+      --text: #f0e8e8;
+      --muted: #7a6068;
+      --on-accent: #fff8f8;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,14 +31,13 @@
       overflow-x: hidden;
     }
 
-    /* Grid background */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(200,245,58,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(200,245,58,0.03) 1px, transparent 1px);
+        linear-gradient(rgba(180,16,42,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180,16,42,0.04) 1px, transparent 1px);
       background-size: 48px 48px;
       pointer-events: none;
       z-index: 0;
@@ -48,12 +51,13 @@
       z-index: 1;
     }
 
-    /* NAV */
     nav {
       padding: 1.5rem 0;
       border-bottom: 1px solid var(--border);
       position: relative;
       z-index: 10;
+      background: rgba(13,5,8,0.95);
+      backdrop-filter: blur(8px);
     }
     nav .inner {
       display: flex;
@@ -66,10 +70,17 @@
     .logo {
       font-family: 'Space Mono', monospace;
       font-size: 0.9rem;
-      color: var(--accent);
+      color: var(--gold);
       letter-spacing: 0.1em;
     }
     .logo span { color: var(--muted); }
+    .logo-m {
+      display: inline-block;
+      width: 22px;
+      height: 18px;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
     nav a {
       font-size: 0.8rem;
       color: var(--muted);
@@ -78,18 +89,25 @@
       text-transform: uppercase;
       transition: color 0.2s;
     }
-    nav a:hover { color: var(--accent); }
+    nav a:hover { color: var(--gold); }
     nav .links { display: flex; gap: 2rem; }
 
-    /* HERO */
     .hero {
       padding: 7rem 0 5rem;
       position: relative;
     }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 500px; height: 500px;
+      background: radial-gradient(ellipse at top right, rgba(124,28,46,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
     .hero-eyebrow {
       font-family: 'Space Mono', monospace;
       font-size: 0.75rem;
-      color: var(--accent);
+      color: var(--gold);
       letter-spacing: 0.2em;
       text-transform: uppercase;
       margin-bottom: 1.5rem;
@@ -107,7 +125,7 @@
     }
     .hero h1 em {
       font-style: normal;
-      color: var(--accent);
+      color: var(--gold);
       position: relative;
     }
     .hero p {
@@ -139,18 +157,25 @@
       transition: all 0.2s;
     }
     .btn-primary {
-      background: var(--accent);
-      color: #0a0a0f;
+      background: var(--accent-bright);
+      color: #fff;
       font-weight: 700;
+      border: 1px solid var(--accent-bright);
     }
-    .btn-primary:hover { background: #d9ff50; transform: translateY(-2px); }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+    .btn-gold {
+      background: var(--gold);
+      color: #1a0800;
+      font-weight: 700;
+      border: 1px solid var(--gold);
+    }
+    .btn-gold:hover { background: #ffe066; transform: translateY(-2px); }
     .btn-ghost {
       border: 1px solid var(--border);
       color: var(--text);
     }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
 
-    /* STAT BAR */
     .stat-bar {
       display: flex;
       gap: 0;
@@ -160,6 +185,7 @@
       margin: 5rem 0;
       opacity: 0;
       animation: fadeUp 0.6s 0.7s forwards;
+      background: var(--surface);
     }
     .stat {
       flex: 1;
@@ -170,7 +196,7 @@
     .stat-number {
       font-size: 2rem;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--gold);
       font-family: 'Space Mono', monospace;
       line-height: 1;
       margin-bottom: 0.4rem;
@@ -182,7 +208,6 @@
       text-transform: uppercase;
     }
 
-    /* SECTION HEADER */
     .section-header {
       display: flex;
       align-items: center;
@@ -197,17 +222,14 @@
     .section-tag {
       font-family: 'Space Mono', monospace;
       font-size: 0.7rem;
-      color: var(--accent);
-      border: 1px solid rgba(200,245,58,0.3);
+      color: var(--gold);
+      border: 1px solid rgba(255,204,51,0.3);
       padding: 0.2rem 0.6rem;
       border-radius: 3px;
       letter-spacing: 0.1em;
     }
 
-    /* TRACKS */
-    .tracks {
-      padding: 2rem 0 5rem;
-    }
+    .tracks { padding: 2rem 0 5rem; }
     .track-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -224,13 +246,16 @@
       display: block;
     }
     .track-card:hover {
-      border-color: var(--accent);
+      border-color: rgba(255,204,51,0.4);
       transform: translateY(-3px);
     }
     .track-card.featured {
       grid-column: span 2;
-      border-color: rgba(200,245,58,0.2);
-      background: linear-gradient(135deg, #111118 0%, #141420 100%);
+      border-color: rgba(180,16,42,0.35);
+      background: linear-gradient(135deg, #150a0d 0%, #1e0e14 100%);
+    }
+    .track-card.featured:hover {
+      border-color: var(--gold-dim);
     }
     .track-label {
       font-family: 'Space Mono', monospace;
@@ -242,9 +267,9 @@
       display: inline-block;
       margin-bottom: 1.2rem;
     }
-    .label-beginner { background: rgba(58,245,200,0.1); color: var(--accent2); }
-    .label-intermediate { background: rgba(200,245,58,0.1); color: var(--accent); }
-    .label-advanced { background: rgba(245,197,58,0.1); color: var(--gold); }
+    .label-beginner { background: rgba(255,204,51,0.12); color: var(--gold); }
+    .label-intermediate { background: rgba(180,16,42,0.2); color: #e05070; }
+    .label-advanced { background: rgba(255,255,255,0.07); color: #c0b0b4; }
     .track-card h3 {
       font-size: 1.3rem;
       font-weight: 800;
@@ -258,10 +283,7 @@
       line-height: 1.6;
       margin-bottom: 1.5rem;
     }
-    .track-meta {
-      display: flex;
-      gap: 1.5rem;
-    }
+    .track-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; }
     .meta-item {
       font-family: 'Space Mono', monospace;
       font-size: 0.7rem;
@@ -269,23 +291,16 @@
     }
     .meta-item span { color: var(--text); }
     .track-arrow {
-      font-size: 1.2rem;
-      color: var(--accent);
+      font-size: 1rem;
+      color: var(--gold);
       margin-top: 1rem;
       display: block;
+      font-family: 'Space Mono', monospace;
     }
 
-    /* PROJECTS TABLE */
-    .projects {
-      padding: 2rem 0 5rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    thead tr {
-      border-bottom: 1px solid var(--border);
-    }
+    .projects { padding: 2rem 0 5rem; }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { border-bottom: 1px solid var(--border); }
     th {
       font-family: 'Space Mono', monospace;
       font-size: 0.65rem;
@@ -305,7 +320,7 @@
     .proj-name {
       font-family: 'Space Mono', monospace;
       font-size: 0.85rem;
-      color: var(--accent);
+      color: var(--gold);
     }
     .badge {
       font-family: 'Space Mono', monospace;
@@ -314,11 +329,10 @@
       border-radius: 3px;
       display: inline-block;
     }
-    .badge-b { background: rgba(58,245,200,0.1); color: var(--accent2); }
-    .badge-i { background: rgba(200,245,58,0.1); color: var(--accent); }
-    .badge-a { background: rgba(245,197,58,0.1); color: var(--gold); }
+    .badge-b { background: rgba(255,204,51,0.12); color: var(--gold); }
+    .badge-i { background: rgba(180,16,42,0.2); color: #e05070; }
+    .badge-a { background: rgba(255,255,255,0.07); color: #c0b0b4; }
 
-    /* INFO GRID */
     .info-grid {
       padding: 2rem 0 5rem;
       display: grid;
@@ -336,10 +350,9 @@
       font-weight: 800;
       margin-bottom: 1.2rem;
       letter-spacing: -0.01em;
+      color: var(--gold);
     }
-    .info-list {
-      list-style: none;
-    }
+    .info-list { list-style: none; }
     .info-list li {
       font-size: 0.85rem;
       color: var(--muted);
@@ -352,19 +365,30 @@
     .info-list li:last-child { border-bottom: none; }
     .info-list li::before {
       content: '→';
-      color: var(--accent);
+      color: var(--gold-dim);
       font-family: 'Space Mono', monospace;
       font-size: 0.75rem;
       flex-shrink: 0;
     }
     .info-list li strong { color: var(--text); }
 
-    /* QUOTE */
     .quote-section {
       padding: 4rem 0;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       margin-bottom: 5rem;
+      position: relative;
+    }
+    .quote-section::before {
+      content: '"';
+      position: absolute;
+      top: 1rem; left: -0.5rem;
+      font-size: 8rem;
+      color: var(--accent);
+      opacity: 0.15;
+      font-family: Georgia, serif;
+      line-height: 1;
+      pointer-events: none;
     }
     blockquote {
       font-size: clamp(1.2rem, 2.5vw, 1.6rem);
@@ -375,7 +399,7 @@
     }
     blockquote em {
       font-style: normal;
-      color: var(--accent);
+      color: var(--gold);
     }
     blockquote cite {
       display: block;
@@ -386,7 +410,18 @@
       font-style: normal;
     }
 
-    /* FOOTER */
+    .maroon-bar {
+      background: var(--accent-bright);
+      padding: 0.6rem 0;
+      text-align: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .maroon-bar span { color: var(--gold); }
+
     footer {
       padding: 3rem 0;
       border-top: 1px solid var(--border);
@@ -403,19 +438,28 @@
       font-size: 0.75rem;
       color: var(--muted);
     }
-    .footer-left a { color: var(--accent); text-decoration: none; }
-    .footer-right {
-      font-size: 0.75rem;
-      color: var(--muted);
+    .footer-left a { color: var(--gold); text-decoration: none; }
+    .footer-right { font-size: 0.75rem; color: var(--muted); }
+
+    .gopher-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255,204,51,0.08);
+      border: 1px solid rgba(255,204,51,0.2);
+      border-radius: 20px;
+      padding: 0.3rem 0.8rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
     }
 
-    /* ANIMATIONS */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* RESPONSIVE */
     @media (max-width: 700px) {
       .track-grid { grid-template-columns: 1fr; }
       .track-card.featured { grid-column: span 1; }
@@ -429,9 +473,16 @@
 </head>
 <body>
 
+  <div class="maroon-bar">University of Minnesota · <span>Ski-U-Mah</span> · Est. 2025</div>
+
   <nav>
     <div class="inner">
-      <div class="logo">UMN<span>/</span>ASIC</div>
+      <div class="logo">
+        <svg class="logo-m" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 17V1L6 9L11 1L16 9L21 1V17" stroke="#ffcc33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        UMN<span>/</span>ASIC
+      </div>
       <div class="links">
         <a href="#tracks">Tracks</a>
         <a href="#projects">Projects</a>
@@ -443,11 +494,11 @@
 
   <section class="hero">
     <div class="container">
-      <div class="hero-eyebrow">University of Minnesota · ECE</div>
+      <div class="hero-eyebrow">University of Minnesota · ECE · Go Gophers</div>
       <h1>Build <em>real</em><br>silicon.</h1>
       <p>The UMN ASIC Club is where you learn to design hardware that actually exists — ASICs, FPGAs, chiplets, and more. No prior experience required.</p>
       <div class="hero-ctas">
-        <a href="#tracks" class="btn btn-primary">Get Started →</a>
+        <a href="#tracks" class="btn btn-gold">Get Started →</a>
         <a href="https://github.com/umn-asic-club" class="btn btn-ghost">GitHub Org</a>
       </div>
     </div>
@@ -474,7 +525,6 @@
     </div>
   </div>
 
-  <!-- TRACKS -->
   <section class="tracks" id="tracks">
     <div class="container">
       <div class="section-header">
@@ -519,7 +569,6 @@
     </div>
   </section>
 
-  <!-- PROJECTS TABLE -->
   <section class="projects" id="projects">
     <div class="container">
       <div class="section-header">
@@ -559,7 +608,6 @@
     </div>
   </section>
 
-  <!-- INFO GRID -->
   <div class="container">
     <div class="info-grid" id="tools">
       <div class="info-card">
@@ -579,13 +627,12 @@
           <li><strong>Prof. Claire Dietz</strong> — Faculty Advisor</li>
           <li><strong>Avyukt Raghuvanshi</strong> — President</li>
           <li><strong>Open to</strong> all UMN ECE students, all levels</li>
-          <li><a href="mailto:raghu119@umn.edu" style="color:var(--accent)">raghu119@umn.edu</a></li>
+          <li><a href="mailto:raghu119@umn.edu" style="color:var(--gold)">raghu119@umn.edu</a></li>
         </ul>
       </div>
     </div>
   </div>
 
-  <!-- QUOTE -->
   <div class="container">
     <div class="quote-section">
       <blockquote>
@@ -602,7 +649,9 @@
           UMN ASIC Club · University of Minnesota ECE ·
           <a href="mailto:raghu119@umn.edu">raghu119@umn.edu</a>
         </div>
-        <div class="footer-right">Open source. All levels welcome.</div>
+        <div class="footer-right">
+          <span class="gopher-badge">&#127386; Go Gophers</span>
+        </div>
       </div>
     </div>
   </footer>
