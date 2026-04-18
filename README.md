@@ -44,9 +44,9 @@ Once you're comfortable with RTL basics, explore our **industry project repos** 
 
 **Faculty Advisors:** Prof. Kevin Cao · Prof. Claire Dietz  
 **President:** Avyukt Raghuvanshi  
-**Vice-President:** Paulo Dietrich
-**Treasurer:** Madeline Ngo
-**Officers:** Ethan Chung, Talis Birmanis
+**Vice-President:** Paulo Dietrich  
+**Treasurer:** Madeline Ngo  
+**Officers:** Ethan Chung, Talis Birmanis  
 **Meetings:** See the [Events tab](../../events) for schedule  
 **Open to:** All UMN ECE students, all experience levels
 
