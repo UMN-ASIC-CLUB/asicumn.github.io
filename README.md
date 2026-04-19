@@ -26,7 +26,7 @@ We exist to close the gap between ECE coursework and real hardware engineering.
 
 ## Club Info
 
-**Faculty Advisors:** Prof. Kevin Cao 
+**Faculty Advisors:** Prof. Kevin Cao  
 **President:** Avi Raghuvanshi  
 **Vice-President:** Paulo Dietrich  
 **Treasurer:** Madeline Ngo  
