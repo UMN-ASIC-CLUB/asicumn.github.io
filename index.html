@@ -30,10 +30,8 @@
       --display: 'Bebas Neue', sans-serif;
       --body: 'DM Sans', sans-serif;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -41,8 +39,6 @@
       overflow-x: hidden;
       font-weight: 300;
     }
-
-    /* ── NOISE ── */
     body::after {
       content: '';
       position: fixed;
@@ -51,6 +47,15 @@
       z-index: 999;
       opacity: 0.022;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── CIRCUIT CANVAS ── */
+    #circuit-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
     }
 
     /* ── TOPBAR ── */
@@ -121,11 +126,7 @@
       inset: 0;
       background: linear-gradient(135deg, var(--maroon-glow), transparent);
     }
-    .logo-wordmark {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
+    .logo-wordmark { display: flex; flex-direction: column; gap: 0; }
     .logo-main { font-family: var(--display); font-size: 1.1rem; letter-spacing: 0.12em; color: var(--text); line-height: 1; }
     .logo-sub { font-family: var(--mono); font-size: 0.55rem; color: var(--text3); letter-spacing: 0.15em; text-transform: uppercase; }
     nav ul { list-style: none; display: flex; align-items: center; gap: 2rem; }
@@ -144,19 +145,8 @@
       overflow: hidden;
       padding: 5rem 0 3rem;
     }
-
-    /* animated circuit trace lines */
-    .hero-traces {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .trace {
-      position: absolute;
-      background: var(--gold-dim);
-      opacity: 0.18;
-    }
+    .hero-traces { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .trace { position: absolute; background: var(--gold-dim); opacity: 0.18; }
     .trace-h { height: 1px; animation: traceH 8s linear infinite; }
     .trace-v { width: 1px; animation: traceV 10s linear infinite; }
     @keyframes traceH {
@@ -169,375 +159,167 @@
       50% { height: 100%; }
       to { height: 0; top: 100%; }
     }
-
     .hero-glow {
-      position: absolute;
-      top: -20%;
-      right: -10%;
-      width: 65%;
-      height: 85%;
+      position: absolute; top: -20%; right: -10%; width: 65%; height: 85%;
       background: radial-gradient(ellipse at top right, rgba(155,24,41,0.22) 0%, rgba(100,10,25,0.08) 40%, transparent 65%);
       pointer-events: none;
     }
     .hero-grid {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
       background-size: 72px 72px;
       opacity: 0.45;
       mask-image: radial-gradient(ellipse 80% 80% at 75% 25%, black 0%, transparent 70%);
     }
-    /* PCB dot junctions at intersections */
     .hero-dots {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
+      position: absolute; inset: 0; pointer-events: none;
       background-image: radial-gradient(circle, rgba(232,170,30,0.25) 1px, transparent 1px);
-      background-size: 72px 72px;
-      background-position: 0 0;
-      opacity: 0.3;
+      background-size: 72px 72px; background-position: 0 0; opacity: 0.3;
       mask-image: radial-gradient(ellipse 60% 60% at 75% 25%, black 0%, transparent 70%);
     }
-
     .hero-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2.5rem;
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 5rem;
-      align-items: center;
+      max-width: 1200px; margin: 0 auto; padding: 0 2.5rem;
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 360px; gap: 5rem; align-items: center;
     }
-
     .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--gold);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 2.2rem;
-      opacity: 0;
-      animation: rise 0.6s 0.05s ease forwards;
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      font-family: var(--mono); font-size: 0.68rem; color: var(--gold);
+      letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 2.2rem;
+      opacity: 0; animation: rise 0.6s 0.05s ease forwards;
     }
     .kicker-line { width: 28px; height: 1px; background: var(--gold-dim); }
-
     h1 {
       font-family: var(--display);
       font-size: clamp(5rem, 11vw, 10rem);
-      line-height: 0.88;
-      letter-spacing: 0.04em;
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: rise 0.6s 0.2s ease forwards;
+      line-height: 0.88; letter-spacing: 0.04em; margin-bottom: 2.5rem;
+      opacity: 0; animation: rise 0.6s 0.2s ease forwards;
     }
     h1 .l1 { display: block; color: var(--text); }
     h1 .l2 { display: block; color: var(--gold); }
     h1 .l3 {
-      display: block;
-      color: var(--maroon-bright);
-      font-size: 0.42em;
-      letter-spacing: 0.08em;
-      line-height: 1;
-      margin-top: 0.3em;
-      font-family: var(--mono);
-      text-transform: uppercase;
+      display: block; color: var(--maroon-bright); font-size: 0.42em;
+      letter-spacing: 0.08em; line-height: 1; margin-top: 0.3em;
+      font-family: var(--mono); text-transform: uppercase;
     }
-
     .hero-desc {
-      font-size: 1rem;
-      color: var(--text2);
-      max-width: 480px;
-      line-height: 1.8;
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: rise 0.6s 0.35s ease forwards;
+      font-size: 1rem; color: var(--text2); max-width: 480px; line-height: 1.8; margin-bottom: 2.5rem;
+      opacity: 0; animation: rise 0.6s 0.35s ease forwards;
     }
     .hero-desc strong { color: var(--text); font-weight: 400; }
-
     .hero-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: rise 0.6s 0.45s ease forwards;
+      display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.5rem;
+      opacity: 0; animation: rise 0.6s 0.45s ease forwards;
     }
     .pill {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.3rem 0.7rem;
-      border-radius: 2px;
-      border: 1px solid var(--border2);
-      color: var(--text3);
+      font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 0.7rem; border-radius: 2px; border: 1px solid var(--border2); color: var(--text3);
     }
-    .pill-active {
-      background: var(--gold-muted);
-      border-color: rgba(232,170,30,0.3);
-      color: var(--gold);
-    }
-
+    .pill-active { background: var(--gold-muted); border-color: rgba(232,170,30,0.3); color: var(--gold); }
     .hero-btns {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: rise 0.6s 0.55s ease forwards;
+      display: flex; gap: 0.75rem; flex-wrap: wrap;
+      opacity: 0; animation: rise 0.6s 0.55s ease forwards;
     }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 3px;
-      transition: all 0.2s;
-      cursor: pointer;
-      border: none;
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em;
+      text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 3px;
+      transition: all 0.2s; cursor: pointer; border: none;
     }
     .btn-gold { background: var(--gold); color: #1a0c00; font-weight: 600; }
     .btn-gold:hover { background: var(--gold-bright); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,170,30,0.2); }
     .btn-outline { background: transparent; color: var(--text2); border: 1px solid var(--border2); }
     .btn-outline:hover { border-color: var(--gold-dim); color: var(--gold); }
-
-    /* Hero right: live status card */
-    .hero-status {
-      opacity: 0;
-      animation: rise 0.6s 0.65s ease forwards;
-    }
-    .status-card {
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
-      overflow: hidden;
-    }
+    .hero-status { opacity: 0; animation: rise 0.6s 0.65s ease forwards; }
+    .status-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; overflow: hidden; }
     .status-card-header {
-      padding: 1rem 1.4rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 1rem 1.4rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .status-card-title {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      color: var(--text3);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-    .live-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      color: #4ade80;
-      letter-spacing: 0.1em;
-    }
+    .status-card-title { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.15em; text-transform: uppercase; }
+    .live-badge { display: flex; align-items: center; gap: 0.4rem; font-family: var(--mono); font-size: 0.6rem; color: #4ade80; letter-spacing: 0.1em; }
     .live-dot { width: 5px; height: 5px; background: #4ade80; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
-
-    .status-items {
-      display: flex;
-      flex-direction: column;
-    }
+    .status-items { display: flex; flex-direction: column; }
     .status-item {
-      padding: 0.85rem 1.4rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+      padding: 0.85rem 1.4rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 1rem;
     }
     .status-item:last-child { border-bottom: none; }
-    .si-icon {
-      width: 28px; height: 28px;
-      border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      font-size: 0.75rem;
-    }
+    .si-icon { width: 28px; height: 28px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.75rem; }
     .si-icon-gold { background: var(--gold-muted); }
     .si-icon-red { background: var(--maroon-glow2); }
     .si-icon-gray { background: rgba(255,255,255,0.04); }
     .si-text { flex: 1; }
     .si-label { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; }
     .si-val { font-size: 0.85rem; color: var(--text); font-weight: 400; margin-top: 0.1rem; }
-    .si-badge {
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.15rem 0.4rem;
-      border-radius: 2px;
-    }
+    .si-badge { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.15rem 0.4rem; border-radius: 2px; }
     .si-badge-green { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
     .si-badge-yellow { background: var(--gold-muted); color: var(--gold); border: 1px solid rgba(232,170,30,0.2); }
     .si-badge-red { background: var(--maroon-glow2); color: #e05070; border: 1px solid rgba(196,30,53,0.25); }
-
-    /* network status at bottom of card */
-    .status-card-footer {
-      padding: 0.85rem 1.4rem;
-      background: rgba(232,170,30,0.04);
-      border-top: 1px solid var(--border);
-    }
+    .status-card-footer { padding: 0.85rem 1.4rem; background: rgba(232,170,30,0.04); border-top: 1px solid var(--border); }
     .network-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.6rem; }
-    .network-nodes {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-    .network-node {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 2px;
-      border: 1px solid;
-    }
+    .network-nodes { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .network-node { font-family: var(--mono); font-size: 0.6rem; padding: 0.2rem 0.5rem; border-radius: 2px; border: 1px solid; }
     .nn-active { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.2); color: #4ade80; }
     .nn-pending { background: var(--gold-muted); border-color: rgba(232,170,30,0.2); color: var(--gold); }
 
-    /* ── SECTION SHELL ── */
+    /* ── SECTIONS ── */
     .section { position: relative; }
     .section-inner { max-width: 1200px; margin: 0 auto; padding: 5rem 2.5rem; }
-
-    .sec-eyebrow {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
+    .sec-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
     .sec-num { font-family: var(--mono); font-size: 0.62rem; color: var(--maroon-bright); letter-spacing: 0.15em; }
     .sec-rule { flex: 1; height: 1px; background: var(--border); }
-    .sec-title {
-      font-family: var(--display);
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      letter-spacing: 0.05em;
-      line-height: 0.9;
-      margin-bottom: 3.5rem;
-    }
+    .sec-title { font-family: var(--display); font-size: clamp(2.5rem, 5vw, 4.5rem); letter-spacing: 0.05em; line-height: 0.9; margin-bottom: 3.5rem; }
     .sec-title .accent { color: var(--gold); }
     .sec-title .dim { color: var(--text3); }
 
     /* ── PROJECT CARD ── */
     .project-card {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
-      overflow: hidden;
-      position: relative;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; overflow: hidden; position: relative;
     }
     .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, var(--maroon-bright) 0%, var(--gold-dim) 60%, transparent 100%);
     }
-
     .project-left { padding: 2.5rem; border-right: 1px solid var(--border); }
     .proj-tags { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .tag {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 2px;
-    }
+    .tag { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 2px; }
     .tag-gold { background: var(--gold-muted); color: var(--gold); border: 1px solid rgba(232,170,30,0.25); }
     .tag-gray { background: rgba(255,255,255,0.04); color: var(--text3); border: 1px solid var(--border); }
     .tag-red { background: var(--maroon-glow); color: #e05070; border: 1px solid rgba(196,30,53,0.2); }
-
-    .project-left h3 {
-      font-family: var(--display);
-      font-size: 2.2rem;
-      letter-spacing: 0.05em;
-      line-height: 0.95;
-      margin-bottom: 1rem;
-    }
+    .project-left h3 { font-family: var(--display); font-size: 2.2rem; letter-spacing: 0.05em; line-height: 0.95; margin-bottom: 1rem; }
     .proj-desc { font-size: 0.88rem; color: var(--text2); line-height: 1.75; margin-bottom: 2rem; }
-
     .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
     .meta-table tr { border-bottom: 1px solid var(--border); }
     .meta-table tr:last-child { border-bottom: none; }
     .meta-table td { padding: 0.6rem 0; font-size: 0.82rem; }
     .meta-table td:first-child { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; width: 40%; }
     .meta-table td:last-child { color: var(--text); }
-
     .proj-btns { display: flex; gap: 0.6rem; }
-
-    /* Code panel */
-    .code-panel {
-      background: var(--bg2);
-      display: flex;
-      flex-direction: column;
-    }
+    .code-panel { background: var(--bg2); display: flex; flex-direction: column; }
     .code-titlebar {
-      padding: 0.65rem 1rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--surface2);
+      padding: 0.65rem 1rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.5rem; background: var(--surface2);
     }
     .cd { width: 8px; height: 8px; border-radius: 50%; }
     .cd:nth-child(1) { background: #ff5f57; }
     .cd:nth-child(2) { background: #ffbd2e; }
     .cd:nth-child(3) { background: #28ca41; }
     .code-fname { font-family: var(--mono); font-size: 0.63rem; color: var(--text3); margin-left: 0.4rem; letter-spacing: 0.04em; }
-    pre {
-      padding: 1.5rem 1.3rem;
-      font-family: var(--mono);
-      font-size: 0.71rem;
-      line-height: 1.75;
-      overflow-x: auto;
-      flex: 1;
-      color: var(--text2);
-    }
+    pre { padding: 1.5rem 1.3rem; font-family: var(--mono); font-size: 0.71rem; line-height: 1.75; overflow-x: auto; flex: 1; color: var(--text2); }
     .kw { color: #c792ea; }
     .ty { color: #82aaff; }
     .cm { color: var(--text3); font-style: italic; }
     .nu { color: #f78c6c; }
     .op { color: var(--text2); }
-    .md { color: #c3e88d; }
-
-    /* pipeline stages diagram */
-    .pipeline-section {
-      margin-top: 2rem;
-      padding: 1.4rem 1.3rem;
-      border-top: 1px solid var(--border);
-    }
+    .pipeline-section { margin-top: 2rem; padding: 1.4rem 1.3rem; border-top: 1px solid var(--border); }
     .pipeline-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.8rem; }
-    .pipeline-stages {
-      display: flex;
-      align-items: center;
-      gap: 0;
-    }
+    .pipeline-stages { display: flex; align-items: center; gap: 0; }
     .ps {
-      flex: 1;
-      padding: 0.4rem 0.3rem;
-      text-align: center;
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      border: 1px solid var(--border2);
-      color: var(--text3);
-      position: relative;
+      flex: 1; padding: 0.4rem 0.3rem; text-align: center;
+      font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase;
+      border: 1px solid var(--border2); color: var(--text3); position: relative;
     }
     .ps:not(:first-child) { border-left: none; }
     .ps:first-child { border-radius: 3px 0 0 3px; }
@@ -545,37 +327,18 @@
     .ps.active { background: var(--gold-muted); border-color: rgba(232,170,30,0.3); color: var(--gold); }
     .ps.done { background: rgba(255,255,255,0.03); color: var(--text3); }
 
-    /* ── DIVIDER ── */
-    .hr { border: none; border-top: 1px solid var(--border); }
-
-    /* ── NETWORK SECTION ── */
+    /* ── NETWORK ── */
     .network-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .network-inner { max-width: 1200px; margin: 0 auto; padding: 4rem 2.5rem; }
     .network-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-top: 2rem;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 2rem;
     }
-    .net-card {
-      background: var(--bg2);
-      padding: 1.5rem;
-      transition: background 0.2s;
-    }
+    .net-card { background: var(--bg2); padding: 1.5rem; transition: background 0.2s; }
     .net-card:hover { background: var(--surface2); }
     .net-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.7rem; }
     .net-uni { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; }
-    .net-status {
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      padding: 0.15rem 0.4rem;
-      border-radius: 2px;
-      letter-spacing: 0.06em;
-    }
+    .net-status { font-family: var(--mono); font-size: 0.58rem; padding: 0.15rem 0.4rem; border-radius: 2px; letter-spacing: 0.06em; }
     .ns-active { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
     .ns-pending { background: var(--gold-muted); color: var(--gold); border: 1px solid rgba(232,170,30,0.2); }
     .ns-out { background: rgba(255,255,255,0.04); color: var(--text3); border: 1px solid var(--border); }
@@ -584,93 +347,42 @@
 
     /* ── PULLQUOTE ── */
     .pq-wrap {
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 4rem 0;
-      background: var(--bg);
-      position: relative;
-      overflow: hidden;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 4rem 0; background: var(--bg); position: relative; overflow: hidden;
     }
     .pq-wrap::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-      background: linear-gradient(to bottom, var(--maroon-bright), transparent);
-      margin-left: 2.5rem;
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: linear-gradient(to bottom, var(--maroon-bright), transparent); margin-left: 2.5rem;
     }
     .pq-inner { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem 0 5rem; }
     .pq-kicker { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
-    blockquote {
-      font-family: var(--display);
-      font-size: clamp(1.6rem, 3vw, 2.8rem);
-      letter-spacing: 0.04em;
-      line-height: 1.1;
-      color: var(--text);
-    }
+    blockquote { font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.8rem); letter-spacing: 0.04em; line-height: 1.1; color: var(--text); }
     blockquote .hl { color: var(--gold); }
-    blockquote cite {
-      display: block;
-      margin-top: 1.5rem;
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      color: var(--text3);
-      letter-spacing: 0.1em;
-      font-style: normal;
-      text-transform: uppercase;
-    }
+    blockquote cite { display: block; margin-top: 1.5rem; font-family: var(--mono); font-size: 0.65rem; color: var(--text3); letter-spacing: 0.1em; font-style: normal; text-transform: uppercase; }
 
     /* ── TEAM ── */
     .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
     }
-    .tc {
-      background: var(--surface);
-      padding: 1.3rem 1.5rem;
-      transition: background 0.2s;
-    }
+    .tc { background: var(--surface); padding: 1.3rem 1.5rem; transition: background 0.2s; }
     .tc:hover { background: var(--surface2); }
     .tc-role { font-family: var(--mono); font-size: 0.58rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.35rem; }
     .tc-name { font-size: 0.9rem; color: var(--text); font-weight: 400; }
     .tc-sub { font-size: 0.72rem; color: var(--text3); margin-top: 0.15rem; }
     .tc.advisor .tc-name { color: var(--gold); }
-    .tc.open {
-      background: linear-gradient(135deg, var(--surface) 0%, rgba(155,24,41,0.08) 100%);
-    }
+    .tc.open { background: linear-gradient(135deg, var(--surface) 0%, rgba(155,24,41,0.08) 100%); }
     .tc.open .tc-name { color: var(--text2); font-style: italic; }
 
     /* ── CONTACT ── */
     .contact-strip {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 2rem;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
-      padding: 2rem 2.5rem;
-      margin-top: 2.5rem;
-      flex-wrap: wrap;
+      display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2rem;
+      background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
+      padding: 2rem 2.5rem; margin-top: 2.5rem; flex-wrap: wrap;
     }
     .cs-title { font-family: var(--display); font-size: 1.8rem; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
     .cs-sub { font-size: 0.85rem; color: var(--text2); }
-    .cs-email {
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--gold);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: color 0.2s;
-      white-space: nowrap;
-    }
+    .cs-email { font-family: var(--mono); font-size: 0.82rem; color: var(--gold); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.2s; white-space: nowrap; }
     .cs-email:hover { color: var(--gold-bright); }
 
     /* ── FOOTER ── */
@@ -709,6 +421,9 @@
   </style>
 </head>
 <body>
+
+  <!-- ANIMATED CIRCUIT BACKGROUND -->
+  <canvas id="circuit-canvas"></canvas>
 
   <!-- TOP BAR -->
   <div class="topbar">
@@ -758,17 +473,14 @@
           <span class="kicker-line"></span>
           UMN ECE · Go Gophers · Recruiting Now
         </div>
-
         <h1>
           <span class="l1">Build</span>
           <span class="l2">Silicon.</span>
           <span class="l3">ASIC · FPGA · Tapeout · RTL-to-GDS</span>
         </h1>
-
         <p class="hero-desc">
           The UMN ASIC Group designs hardware that <strong>physically exists</strong>. We go from architecture to RTL to synthesized netlist to real chip. Advised by <strong>Prof. Kevin Cao</strong> and connecting with student silicon teams at <strong>Berkeley, Cornell, Georgia Tech,</strong> and <strong>UT Austin</strong>.
         </p>
-
         <div class="hero-pills">
           <span class="pill pill-active">RV32I Core</span>
           <span class="pill pill-active">RTL-to-GDS</span>
@@ -778,14 +490,12 @@
           <span class="pill">Synopsys DC</span>
           <span class="pill">ChipFoundry</span>
         </div>
-
         <div class="hero-btns">
           <a href="#project" class="btn btn-gold">See the Project →</a>
           <a href="https://github.com/UMN-ASIC-CLUB" target="_blank" class="btn btn-outline">GitHub Org</a>
         </div>
       </div>
 
-      <!-- Status card -->
       <div class="hero-status">
         <div class="status-card">
           <div class="status-card-header">
@@ -849,7 +559,6 @@
         <span class="sec-rule"></span>
       </div>
       <h2 class="sec-title">RISC-V <span class="accent">Processor</span><br><span class="dim">Core.</span></h2>
-
       <div class="project-card">
         <div class="project-left">
           <div class="proj-tags">
@@ -875,7 +584,6 @@
             <a href="mailto:umnasicgroup@gmail.com" class="btn btn-outline">Get Involved</a>
           </div>
         </div>
-
         <div class="code-panel">
           <div class="code-titlebar">
             <div class="cd"></div><div class="cd"></div><div class="cd"></div>
@@ -911,7 +619,6 @@
   <span class="op">.</span>flush <span class="op">(</span>flush<span class="op">)</span>
 <span class="op">);</span>
 <span class="kw">endmodule</span></pre>
-
           <div class="pipeline-section">
             <div class="pipeline-label">Pipeline stages</div>
             <div class="pipeline-stages">
@@ -951,50 +658,32 @@
       </p>
       <div class="network-grid">
         <div class="net-card">
-          <div class="net-card-top">
-            <span class="net-uni">UC Berkeley</span>
-            <span class="net-status ns-active">In Contact</span>
-          </div>
+          <div class="net-card-top"><span class="net-uni">UC Berkeley</span><span class="net-status ns-active">In Contact</span></div>
           <div class="net-name">Tapeout Decal</div>
           <div class="net-desc">SkyWater 130nm tapeout course. Discussing physical design collaboration and IP reuse on shared process nodes.</div>
         </div>
         <div class="net-card">
-          <div class="net-card-top">
-            <span class="net-uni">Cornell</span>
-            <span class="net-status ns-active">Meeting Scheduled</span>
-          </div>
+          <div class="net-card-top"><span class="net-uni">Cornell</span><span class="net-status ns-active">Meeting Scheduled</span></div>
           <div class="net-name">C2S2</div>
           <div class="net-desc">Custom Silicon Systems project team. Connected via Prof. Batten — exploring RTL/SoC design collaboration and project alignment.</div>
         </div>
         <div class="net-card">
-          <div class="net-card-top">
-            <span class="net-uni">Georgia Tech</span>
-            <span class="net-status ns-pending">Outreach Sent</span>
-          </div>
+          <div class="net-card-top"><span class="net-uni">Georgia Tech</span><span class="net-status ns-pending">Outreach Sent</span></div>
           <div class="net-name">SiliconJackets</div>
           <div class="net-desc">Student-run SoC team covering digital design, verification, physical design, and Code-A-Chip. Strong structural reference.</div>
         </div>
         <div class="net-card">
-          <div class="net-card-top">
-            <span class="net-uni">UT Austin</span>
-            <span class="net-status ns-pending">Outreach Sent</span>
-          </div>
+          <div class="net-card-top"><span class="net-uni">UT Austin</span><span class="net-status ns-pending">Outreach Sent</span></div>
           <div class="net-name">Longhorn Silicon</div>
           <div class="net-desc">Student-led AI inference accelerator and silicon tapeout pipeline. Parallel goals to UMN ASIC.</div>
         </div>
         <div class="net-card">
-          <div class="net-card-top">
-            <span class="net-uni">Industry</span>
-            <span class="net-status ns-active">In Contact</span>
-          </div>
+          <div class="net-card-top"><span class="net-uni">Industry</span><span class="net-status ns-active">In Contact</span></div>
           <div class="net-name">ChipFoundry / chipIgnite</div>
           <div class="net-desc">Tapeout partner. Spoke directly about TinyTapeout, shuttle slots, competitions, and shared open-frame multi-university projects.</div>
         </div>
         <div class="net-card" style="background: linear-gradient(135deg, var(--bg2) 0%, rgba(155,24,41,0.06) 100%);">
-          <div class="net-card-top">
-            <span class="net-uni">Coming Soon</span>
-            <span class="net-status ns-out">TBD</span>
-          </div>
+          <div class="net-card-top"><span class="net-uni">Coming Soon</span><span class="net-status ns-out">TBD</span></div>
           <div class="net-name">CMU · MIT · Stanford</div>
           <div class="net-desc">Outreach ongoing. Expanding the network to build a genuine inter-university student silicon pipeline.</div>
         </div>
@@ -1010,46 +699,16 @@
         <span class="sec-rule"></span>
       </div>
       <h2 class="sec-title">The <span class="accent">People</span><br><span class="dim">Behind It.</span></h2>
-
       <div class="team-grid">
-        <div class="tc advisor">
-          <div class="tc-role">Faculty Advisor</div>
-          <div class="tc-name">Prof. Kevin Cao</div>
-          <div class="tc-sub">UMN ECE</div>
-        </div>
-        <div class="tc advisor">
-          <div class="tc-role">Faculty Advisor</div>
-          <div class="tc-name">Claire Dietz</div>
-          <div class="tc-sub">UMN ECE</div>
-        </div>
-        <div class="tc">
-          <div class="tc-role">President</div>
-          <div class="tc-name">Avyukt Raghuvanshi</div>
-          <div class="tc-sub">EE &amp; Physics</div>
-        </div>
-        <div class="tc">
-          <div class="tc-role">Vice-President</div>
-          <div class="tc-name">Paulo Dietrich</div>
-        </div>
-        <div class="tc">
-          <div class="tc-role">Treasurer</div>
-          <div class="tc-name">Madeline Ngo</div>
-        </div>
-        <div class="tc">
-          <div class="tc-role">Officer</div>
-          <div class="tc-name">Ethan Chung</div>
-        </div>
-        <div class="tc">
-          <div class="tc-role">Officer</div>
-          <div class="tc-name">Talis Birmanis</div>
-        </div>
-        <div class="tc open">
-          <div class="tc-role">Membership</div>
-          <div class="tc-name">Open to all UMN ECE/CS students</div>
-          <div class="tc-sub">No prior hardware experience required</div>
-        </div>
+        <div class="tc advisor"><div class="tc-role">Faculty Advisor</div><div class="tc-name">Prof. Kevin Cao</div><div class="tc-sub">UMN ECE</div></div>
+        <div class="tc advisor"><div class="tc-role">Faculty Advisor</div><div class="tc-name">Claire Dietz</div><div class="tc-sub">UMN ECE</div></div>
+        <div class="tc"><div class="tc-role">President</div><div class="tc-name">Avyukt Raghuvanshi</div><div class="tc-sub">EE &amp; Physics</div></div>
+        <div class="tc"><div class="tc-role">Vice-President</div><div class="tc-name">Paulo Dietrich</div></div>
+        <div class="tc"><div class="tc-role">Treasurer</div><div class="tc-name">Madeline Ngo</div></div>
+        <div class="tc"><div class="tc-role">Officer</div><div class="tc-name">Ethan Chung</div></div>
+        <div class="tc"><div class="tc-role">Officer</div><div class="tc-name">Talis Birmanis</div></div>
+        <div class="tc open"><div class="tc-role">Membership</div><div class="tc-name">Open to all UMN ECE/CS students</div><div class="tc-sub">No prior hardware experience required</div></div>
       </div>
-
       <div class="contact-strip">
         <div>
           <div class="cs-title">GET INVOLVED.</div>
@@ -1083,6 +742,217 @@
       </div>
     </div>
   </footer>
+
+  <!-- ════════════════════════════════════════
+       ANIMATED PCB CIRCUIT BOARD BACKGROUND
+       Canvas fills the viewport, fixed behind
+       all content. Draws a sparse grid of pad
+       nodes connected by L-shaped copper traces,
+       with glowing signal pulses travelling along them.
+       Colors: gold (#a97810), maroon (#9b1829), dim white.
+  ════════════════════════════════════════ -->
+  <script>
+  (function () {
+    var canvas = document.getElementById('circuit-canvas');
+    var ctx    = canvas.getContext('2d');
+
+    var W, H;
+    var nodes  = [];
+    var traces = [];
+    var pulses = [];
+    var GRID   = 90;
+
+    /* colour bases — kept as prefix strings so we can append alpha */
+    var C_GOLD   = '169,120,16';
+    var C_MAROON = '155,24,41';
+    var C_DIM    = '82,75,98';
+
+    function rnd(min, max) { return min + Math.random() * (max - min); }
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    /* ── Build scene ─────────────────────────── */
+    function build() {
+      nodes  = [];
+      traces = [];
+      pulses = [];
+
+      var cols = Math.ceil(W / GRID) + 2;
+      var rows = Math.ceil(H / GRID) + 2;
+
+      /* Sparse node grid — ~32 % occupancy */
+      for (var r = 0; r < rows; r++) {
+        for (var c = 0; c < cols; c++) {
+          if (Math.random() > 0.32) continue;
+          var col = pick([C_GOLD, C_GOLD, C_MAROON, C_DIM]);
+          nodes.push({
+            x:    c * GRID + rnd(-6, 6),
+            y:    r * GRID + rnd(-6, 6),
+            r:    rnd(1.6, 3.4),
+            kind: pick(['dot', 'sq', 'ring']),
+            col:  col,
+            a:    rnd(0.10, 0.22)
+          });
+        }
+      }
+
+      /* Connect nearby node pairs with orthogonal traces */
+      var n = nodes.length;
+      for (var i = 0; i < n; i++) {
+        var a = nodes[i];
+        /* find up to 2 close neighbours */
+        var found = 0;
+        for (var j = i + 1; j < n && found < 2; j++) {
+          if (Math.random() > 0.50) continue;
+          var b  = nodes[j];
+          var dx = b.x - a.x;
+          var dy = b.y - a.y;
+          if (Math.sqrt(dx*dx + dy*dy) > GRID * 1.65) continue;
+          traces.push({
+            ax: a.x, ay: a.y,
+            bx: b.x, by: b.y,
+            horiz: Math.random() < 0.5,          /* L-bend direction */
+            col:   pick([C_GOLD, C_GOLD, C_MAROON, C_DIM]),
+            a:     rnd(0.04, 0.11),
+            w:     rnd(0.4, 1.0)
+          });
+          found++;
+        }
+      }
+    }
+
+    /* ── Resize ──────────────────────────────── */
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+      build();
+    }
+
+    /* ── Draw pad ────────────────────────────── */
+    function drawPad(nd) {
+      var fill   = 'rgba(' + nd.col + ',' + nd.a + ')';
+      var stroke = 'rgba(' + nd.col + ',' + (nd.a * 1.8) + ')';
+      ctx.fillStyle   = fill;
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth   = 0.7;
+      if (nd.kind === 'dot') {
+        ctx.beginPath();
+        ctx.arc(nd.x, nd.y, nd.r, 0, 6.283);
+        ctx.fill();
+      } else if (nd.kind === 'sq') {
+        ctx.fillRect(nd.x - nd.r, nd.y - nd.r, nd.r * 2, nd.r * 2);
+      } else {                          /* ring */
+        ctx.beginPath();
+        ctx.arc(nd.x, nd.y, nd.r * 1.5, 0, 6.283);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(nd.x, nd.y, nd.r * 0.45, 0, 6.283);
+        ctx.fill();
+      }
+    }
+
+    /* ── Draw trace ──────────────────────────── */
+    function drawTrace(t) {
+      ctx.strokeStyle = 'rgba(' + t.col + ',' + t.a + ')';
+      ctx.lineWidth   = t.w;
+      ctx.beginPath();
+      ctx.moveTo(t.ax, t.ay);
+      if (t.horiz) {
+        ctx.lineTo(t.bx, t.ay);
+        ctx.lineTo(t.bx, t.by);
+      } else {
+        ctx.lineTo(t.ax, t.by);
+        ctx.lineTo(t.bx, t.by);
+      }
+      ctx.stroke();
+    }
+
+    /* ── Position along trace [0..1] ────────── */
+    function posOnTrace(t, p) {
+      var s1, s2, tot, r;
+      if (t.horiz) {
+        s1 = Math.abs(t.bx - t.ax);
+        s2 = Math.abs(t.by - t.ay);
+        tot = s1 + s2;
+        if (p * tot <= s1) {
+          return { x: t.ax + (t.bx - t.ax) * (p * tot / (s1 || 1)), y: t.ay };
+        }
+        r = (p * tot - s1) / (s2 || 1);
+        return { x: t.bx, y: t.ay + (t.by - t.ay) * r };
+      } else {
+        s1 = Math.abs(t.by - t.ay);
+        s2 = Math.abs(t.bx - t.ax);
+        tot = s1 + s2;
+        if (p * tot <= s1) {
+          return { x: t.ax, y: t.ay + (t.by - t.ay) * (p * tot / (s1 || 1)) };
+        }
+        r = (p * tot - s1) / (s2 || 1);
+        return { x: t.ax + (t.bx - t.ax) * r, y: t.by };
+      }
+    }
+
+    /* ── Spawn a signal pulse ────────────────── */
+    function spawnPulse() {
+      if (!traces.length) return;
+      var t = traces[Math.floor(Math.random() * traces.length)];
+      pulses.push({
+        t:    t,
+        p:    0,
+        spd:  rnd(0.003, 0.008),
+        sz:   rnd(1.6, 3.2),
+        col:  t.col
+      });
+    }
+
+    /* ── Animation loop ──────────────────────── */
+    var spawnAcc = 0;
+    var lastTS   = 0;
+
+    function frame(ts) {
+      var dt = Math.min((ts - lastTS) * 0.001, 0.05);
+      lastTS = ts;
+
+      ctx.clearRect(0, 0, W, H);
+
+      /* static geometry */
+      var i;
+      for (i = 0; i < traces.length; i++) drawTrace(traces[i]);
+      for (i = 0; i < nodes.length;  i++) drawPad(nodes[i]);
+
+      /* spawn */
+      spawnAcc += dt;
+      if (spawnAcc > rnd(0.06, 0.16)) { spawnPulse(); spawnAcc = 0; }
+      if (pulses.length > 90) pulses.splice(0, pulses.length - 90);
+
+      /* draw pulses */
+      for (i = pulses.length - 1; i >= 0; i--) {
+        var pu = pulses[i];
+        pu.p += pu.spd;
+        if (pu.p >= 1.0) { pulses.splice(i, 1); continue; }
+
+        var pos = posOnTrace(pu.t, pu.p);
+        var gr  = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, pu.sz * 7);
+        gr.addColorStop(0,   'rgba(' + pu.col + ',0.65)');
+        gr.addColorStop(0.35,'rgba(' + pu.col + ',0.20)');
+        gr.addColorStop(1,   'rgba(' + pu.col + ',0)');
+        ctx.fillStyle = gr;
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, pu.sz * 7, 0, 6.283);
+        ctx.fill();
+
+        ctx.fillStyle = 'rgba(' + pu.col + ',0.92)';
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, pu.sz * 0.85, 0, 6.283);
+        ctx.fill();
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(frame);
+  }());
+  </script>
 
 </body>
 </html>
