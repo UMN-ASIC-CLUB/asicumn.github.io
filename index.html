@@ -3,609 +3,1083 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UMN ASIC Group</title>
+  <title>UMN ASIC Group — Build Real Silicon</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #0d0508;
-      --surface: #150a0d;
-      --border: #2e1018;
-      --accent: #7c1c2e;
-      --accent-bright: #b4102a;
-      --accent-hover: #d4122f;
-      --gold: #ffcc33;
-      --gold-dim: #c99a1a;
-      --gold-dark: #7a5e00;
-      --text: #f0e8e8;
-      --muted: #7a6068;
-      --on-accent: #fff8f8;
+      --bg: #060508;
+      --bg2: #0c0a10;
+      --surface: #110f16;
+      --surface2: #181520;
+      --border: #1e1a28;
+      --border2: #2a2538;
+      --maroon: #7d1221;
+      --maroon-mid: #9b1829;
+      --maroon-bright: #c41e35;
+      --maroon-glow: rgba(196,30,53,0.10);
+      --maroon-glow2: rgba(196,30,53,0.20);
+      --gold: #e8aa1e;
+      --gold-bright: #f0c040;
+      --gold-dim: #a97810;
+      --gold-muted: rgba(232,170,30,0.12);
+      --text: #eae4f2;
+      --text2: #948ba3;
+      --text3: #524b62;
+      --mono: 'IBM Plex Mono', monospace;
+      --display: 'Bebas Neue', sans-serif;
+      --body: 'DM Sans', sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Syne', sans-serif;
+      font-family: var(--body);
       overflow-x: hidden;
+      font-weight: 300;
     }
 
-    body::before {
+    /* ── NOISE ── */
+    body::after {
       content: '';
       position: fixed;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(180,16,42,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(180,16,42,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
       pointer-events: none;
-      z-index: 0;
+      z-index: 999;
+      opacity: 0.022;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 2rem;
+    /* ── TOPBAR ── */
+    .topbar {
+      background: linear-gradient(90deg, var(--maroon) 0%, #5a0d19 100%);
+      padding: 0.45rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
       position: relative;
-      z-index: 1;
+      z-index: 100;
+      overflow: hidden;
     }
+    .topbar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.03) 60px, rgba(255,255,255,0.03) 61px);
+    }
+    .topbar-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 0.18rem 0.7rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .topbar-pill .dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+    .topbar-text { font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.55); letter-spacing: 0.12em; text-transform: uppercase; }
 
+    /* ── NAV ── */
     nav {
-      padding: 1.5rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(6,5,8,0.9);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      position: relative;
-      z-index: 10;
-      background: rgba(13,5,8,0.95);
-      backdrop-filter: blur(8px);
     }
-    nav .inner {
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+      height: 58px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 2rem;
     }
-    .logo {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.9rem;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-    }
-    .logo span { color: var(--muted); }
-    .logo-m {
-      display: inline-block;
-      width: 22px;
-      height: 18px;
-      margin-right: 0.5rem;
-      vertical-align: middle;
-    }
-    nav a {
-      font-size: 0.8rem;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    nav a:hover { color: var(--gold); }
-    nav .links { display: flex; gap: 2rem; }
-
-    .hero {
-      padding: 7rem 0 5rem;
+    .logo { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+    .logo-ic {
+      width: 32px; height: 32px;
+      border: 1.5px solid var(--gold-dim);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
       position: relative;
+      overflow: hidden;
     }
-    .hero::after {
+    .logo-ic::before {
       content: '';
       position: absolute;
-      top: 0; right: 0;
-      width: 500px; height: 500px;
-      background: radial-gradient(ellipse at top right, rgba(124,28,46,0.15) 0%, transparent 70%);
+      inset: 0;
+      background: linear-gradient(135deg, var(--maroon-glow), transparent);
+    }
+    .logo-wordmark {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .logo-main { font-family: var(--display); font-size: 1.1rem; letter-spacing: 0.12em; color: var(--text); line-height: 1; }
+    .logo-sub { font-family: var(--mono); font-size: 0.55rem; color: var(--text3); letter-spacing: 0.15em; text-transform: uppercase; }
+    nav ul { list-style: none; display: flex; align-items: center; gap: 2rem; }
+    nav ul a { font-family: var(--mono); font-size: 0.7rem; color: var(--text2); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+    nav ul a:hover { color: var(--gold); }
+    .nav-cta { background: var(--maroon-bright) !important; color: #fff !important; padding: 0.38rem 1rem; border-radius: 3px; transition: background 0.2s !important; }
+    .nav-cta:hover { background: #e0283f !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 5rem 0 3rem;
+    }
+
+    /* animated circuit trace lines */
+    .hero-traces {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .trace {
+      position: absolute;
+      background: var(--gold-dim);
+      opacity: 0.18;
+    }
+    .trace-h { height: 1px; animation: traceH 8s linear infinite; }
+    .trace-v { width: 1px; animation: traceV 10s linear infinite; }
+    @keyframes traceH {
+      from { width: 0; left: 0; }
+      50% { width: 100%; }
+      to { width: 0; left: 100%; }
+    }
+    @keyframes traceV {
+      from { height: 0; top: 0; }
+      50% { height: 100%; }
+      to { height: 0; top: 100%; }
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 65%;
+      height: 85%;
+      background: radial-gradient(ellipse at top right, rgba(155,24,41,0.22) 0%, rgba(100,10,25,0.08) 40%, transparent 65%);
       pointer-events: none;
     }
-    .hero-eyebrow {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 72px 72px;
+      opacity: 0.45;
+      mask-image: radial-gradient(ellipse 80% 80% at 75% 25%, black 0%, transparent 70%);
+    }
+    /* PCB dot junctions at intersections */
+    .hero-dots {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, rgba(232,170,30,0.25) 1px, transparent 1px);
+      background-size: 72px 72px;
+      background-position: 0 0;
+      opacity: 0.3;
+      mask-image: radial-gradient(ellipse 60% 60% at 75% 25%, black 0%, transparent 70%);
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
       color: var(--gold);
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2.2rem;
       opacity: 0;
-      animation: fadeUp 0.6s 0.1s forwards;
+      animation: rise 0.6s 0.05s ease forwards;
     }
-    .hero h1 {
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      font-weight: 800;
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      margin-bottom: 2rem;
+    .kicker-line { width: 28px; height: 1px; background: var(--gold-dim); }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(5rem, 11vw, 10rem);
+      line-height: 0.88;
+      letter-spacing: 0.04em;
+      margin-bottom: 2.5rem;
       opacity: 0;
-      animation: fadeUp 0.6s 0.2s forwards;
+      animation: rise 0.6s 0.2s ease forwards;
     }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--gold);
-      position: relative;
+    h1 .l1 { display: block; color: var(--text); }
+    h1 .l2 { display: block; color: var(--gold); }
+    h1 .l3 {
+      display: block;
+      color: var(--maroon-bright);
+      font-size: 0.42em;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      margin-top: 0.3em;
+      font-family: var(--mono);
+      text-transform: uppercase;
     }
-    .hero p {
-      font-size: 1.1rem;
-      color: var(--muted);
-      max-width: 560px;
-      line-height: 1.7;
-      margin-bottom: 3rem;
+
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--text2);
+      max-width: 480px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
       opacity: 0;
-      animation: fadeUp 0.6s 0.35s forwards;
+      animation: rise 0.6s 0.35s ease forwards;
     }
-    .hero-ctas {
+    .hero-desc strong { color: var(--text); font-weight: 400; }
+
+    .hero-pills {
       display: flex;
-      gap: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: rise 0.6s 0.45s ease forwards;
+    }
+    .pill {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 2px;
+      border: 1px solid var(--border2);
+      color: var(--text3);
+    }
+    .pill-active {
+      background: var(--gold-muted);
+      border-color: rgba(232,170,30,0.3);
+      color: var(--gold);
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 0.75rem;
       flex-wrap: wrap;
       opacity: 0;
-      animation: fadeUp 0.6s 0.5s forwards;
+      animation: rise 0.6s 0.55s ease forwards;
     }
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.85rem 1.8rem;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
+      gap: 0.45rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
       letter-spacing: 0.08em;
       text-decoration: none;
-      border-radius: 4px;
+      padding: 0.75rem 1.5rem;
+      border-radius: 3px;
       transition: all 0.2s;
+      cursor: pointer;
+      border: none;
     }
-    .btn-primary {
-      background: var(--accent-bright);
-      color: #fff;
-      font-weight: 700;
-      border: 1px solid var(--accent-bright);
-    }
-    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
-    .btn-gold {
-      background: var(--gold);
-      color: #1a0800;
-      font-weight: 700;
-      border: 1px solid var(--gold);
-    }
-    .btn-gold:hover { background: #ffe066; transform: translateY(-2px); }
-    .btn-ghost {
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-gold { background: var(--gold); color: #1a0c00; font-weight: 600; }
+    .btn-gold:hover { background: var(--gold-bright); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,170,30,0.2); }
+    .btn-outline { background: transparent; color: var(--text2); border: 1px solid var(--border2); }
+    .btn-outline:hover { border-color: var(--gold-dim); color: var(--gold); }
 
-    .stat-bar {
-      display: flex;
-      gap: 0;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      margin: 5rem 0;
+    /* Hero right: live status card */
+    .hero-status {
       opacity: 0;
-      animation: fadeUp 0.6s 0.7s forwards;
+      animation: rise 0.6s 0.65s ease forwards;
+    }
+    .status-card {
       background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      overflow: hidden;
     }
-    .stat {
-      flex: 1;
-      padding: 1.8rem 2rem;
-      border-right: 1px solid var(--border);
-    }
-    .stat:last-child { border-right: none; }
-    .stat-number {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--gold);
-      font-family: 'Space Mono', monospace;
-      line-height: 1;
-      margin-bottom: 0.4rem;
-    }
-    .stat-label {
-      font-size: 0.75rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 2.5rem;
-    }
-    .section-header h2 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-    .section-tag {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--gold);
-      border: 1px solid rgba(255,204,51,0.3);
-      padding: 0.2rem 0.6rem;
-      border-radius: 3px;
-      letter-spacing: 0.1em;
-    }
-
-    .tracks { padding: 2rem 0 5rem; }
-    .track-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-    .track-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2rem;
-      transition: border-color 0.2s, transform 0.2s;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .track-card:hover {
-      border-color: rgba(255,204,51,0.4);
-      transform: translateY(-3px);
-    }
-    .track-card.featured {
-      grid-column: span 2;
-      border-color: rgba(180,16,42,0.35);
-      background: linear-gradient(135deg, #150a0d 0%, #1e0e14 100%);
-    }
-    .track-card.featured:hover {
-      border-color: var(--gold-dim);
-    }
-    .track-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.6rem;
-      border-radius: 3px;
-      display: inline-block;
-      margin-bottom: 1.2rem;
-    }
-    .label-beginner { background: rgba(255,204,51,0.12); color: var(--gold); }
-    .label-intermediate { background: rgba(180,16,42,0.2); color: #e05070; }
-    .label-advanced { background: rgba(255,255,255,0.07); color: #c0b0b4; }
-    .track-card h3 {
-      font-size: 1.3rem;
-      font-weight: 800;
-      margin-bottom: 0.6rem;
-      letter-spacing: -0.01em;
-    }
-    .track-card.featured h3 { font-size: 1.6rem; }
-    .track-card p {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
-    }
-    .track-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-    .meta-item {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-    .meta-item span { color: var(--text); }
-    .track-arrow {
-      font-size: 1rem;
-      color: var(--gold);
-      margin-top: 1rem;
-      display: block;
-      font-family: 'Space Mono', monospace;
-    }
-
-    .projects { padding: 2rem 0 5rem; }
-    table { width: 100%; border-collapse: collapse; }
-    thead tr { border-bottom: 1px solid var(--border); }
-    th {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding: 0.8rem 1rem;
-      text-align: left;
-      font-weight: 400;
-    }
-    td {
-      padding: 1.2rem 1rem;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
-    }
-    tr:hover td { background: var(--surface); }
-    .proj-name {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--gold);
-    }
-    .badge {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 3px;
-      display: inline-block;
-    }
-    .badge-b { background: rgba(255,204,51,0.12); color: var(--gold); }
-    .badge-i { background: rgba(180,16,42,0.2); color: #e05070; }
-    .badge-a { background: rgba(255,255,255,0.07); color: #c0b0b4; }
-
-    .info-grid {
-      padding: 2rem 0 5rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-    .info-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2rem;
-    }
-    .info-card h3 {
-      font-size: 1rem;
-      font-weight: 800;
-      margin-bottom: 1.2rem;
-      letter-spacing: -0.01em;
-      color: var(--gold);
-    }
-    .info-list { list-style: none; }
-    .info-list li {
-      font-size: 0.85rem;
-      color: var(--muted);
-      padding: 0.5rem 0;
+    .status-card-header {
+      padding: 1rem 1.4rem;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-    }
-    .info-list li:last-child { border-bottom: none; }
-    .info-list li::before {
-      content: '→';
-      color: var(--gold-dim);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      flex-shrink: 0;
-    }
-    .info-list li strong { color: var(--text); }
-
-    .quote-section {
-      padding: 4rem 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 5rem;
-      position: relative;
-    }
-    .quote-section::before {
-      content: '"';
-      position: absolute;
-      top: 1rem; left: -0.5rem;
-      font-size: 8rem;
-      color: var(--accent);
-      opacity: 0.15;
-      font-family: Georgia, serif;
-      line-height: 1;
-      pointer-events: none;
-    }
-    blockquote {
-      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-      font-weight: 600;
-      line-height: 1.5;
-      color: var(--text);
-      max-width: 800px;
-    }
-    blockquote em {
-      font-style: normal;
-      color: var(--gold);
-    }
-    blockquote cite {
-      display: block;
-      margin-top: 1rem;
-      font-size: 0.8rem;
-      font-family: 'Space Mono', monospace;
-      color: var(--muted);
-      font-style: normal;
-    }
-
-    .maroon-bar {
-      background: var(--accent-bright);
-      padding: 0.6rem 0;
-      text-align: center;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.85);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-    .maroon-bar span { color: var(--gold); }
-
-    footer {
-      padding: 3rem 0;
-      border-top: 1px solid var(--border);
-    }
-    .footer-inner {
-      display: flex;
       justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
     }
-    .footer-left {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--muted);
+    .status-card-title {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--text3);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
     }
-    .footer-left a { color: var(--gold); text-decoration: none; }
-    .footer-right { font-size: 0.75rem; color: var(--muted); }
-
-    .gopher-badge {
-      display: inline-flex;
+    .live-badge {
+      display: flex;
       align-items: center;
       gap: 0.4rem;
-      background: rgba(255,204,51,0.08);
-      border: 1px solid rgba(255,204,51,0.2);
-      border-radius: 20px;
-      padding: 0.3rem 0.8rem;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--gold);
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: #4ade80;
       letter-spacing: 0.1em;
     }
+    .live-dot { width: 5px; height: 5px; background: #4ade80; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
 
-    @keyframes fadeUp {
+    .status-items {
+      display: flex;
+      flex-direction: column;
+    }
+    .status-item {
+      padding: 0.85rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .status-item:last-child { border-bottom: none; }
+    .si-icon {
+      width: 28px; height: 28px;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+    }
+    .si-icon-gold { background: var(--gold-muted); }
+    .si-icon-red { background: var(--maroon-glow2); }
+    .si-icon-gray { background: rgba(255,255,255,0.04); }
+    .si-text { flex: 1; }
+    .si-label { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; }
+    .si-val { font-size: 0.85rem; color: var(--text); font-weight: 400; margin-top: 0.1rem; }
+    .si-badge {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.4rem;
+      border-radius: 2px;
+    }
+    .si-badge-green { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+    .si-badge-yellow { background: var(--gold-muted); color: var(--gold); border: 1px solid rgba(232,170,30,0.2); }
+    .si-badge-red { background: var(--maroon-glow2); color: #e05070; border: 1px solid rgba(196,30,53,0.25); }
+
+    /* network status at bottom of card */
+    .status-card-footer {
+      padding: 0.85rem 1.4rem;
+      background: rgba(232,170,30,0.04);
+      border-top: 1px solid var(--border);
+    }
+    .network-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.6rem; }
+    .network-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .network-node {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+      border: 1px solid;
+    }
+    .nn-active { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.2); color: #4ade80; }
+    .nn-pending { background: var(--gold-muted); border-color: rgba(232,170,30,0.2); color: var(--gold); }
+
+    /* ── SECTION SHELL ── */
+    .section { position: relative; }
+    .section-inner { max-width: 1200px; margin: 0 auto; padding: 5rem 2.5rem; }
+
+    .sec-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .sec-num { font-family: var(--mono); font-size: 0.62rem; color: var(--maroon-bright); letter-spacing: 0.15em; }
+    .sec-rule { flex: 1; height: 1px; background: var(--border); }
+    .sec-title {
+      font-family: var(--display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 0.05em;
+      line-height: 0.9;
+      margin-bottom: 3.5rem;
+    }
+    .sec-title .accent { color: var(--gold); }
+    .sec-title .dim { color: var(--text3); }
+
+    /* ── PROJECT CARD ── */
+    .project-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--maroon-bright) 0%, var(--gold-dim) 60%, transparent 100%);
+    }
+
+    .project-left { padding: 2.5rem; border-right: 1px solid var(--border); }
+    .proj-tags { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
+    }
+    .tag-gold { background: var(--gold-muted); color: var(--gold); border: 1px solid rgba(232,170,30,0.25); }
+    .tag-gray { background: rgba(255,255,255,0.04); color: var(--text3); border: 1px solid var(--border); }
+    .tag-red { background: var(--maroon-glow); color: #e05070; border: 1px solid rgba(196,30,53,0.2); }
+
+    .project-left h3 {
+      font-family: var(--display);
+      font-size: 2.2rem;
+      letter-spacing: 0.05em;
+      line-height: 0.95;
+      margin-bottom: 1rem;
+    }
+    .proj-desc { font-size: 0.88rem; color: var(--text2); line-height: 1.75; margin-bottom: 2rem; }
+
+    .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+    .meta-table tr { border-bottom: 1px solid var(--border); }
+    .meta-table tr:last-child { border-bottom: none; }
+    .meta-table td { padding: 0.6rem 0; font-size: 0.82rem; }
+    .meta-table td:first-child { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; width: 40%; }
+    .meta-table td:last-child { color: var(--text); }
+
+    .proj-btns { display: flex; gap: 0.6rem; }
+
+    /* Code panel */
+    .code-panel {
+      background: var(--bg2);
+      display: flex;
+      flex-direction: column;
+    }
+    .code-titlebar {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--surface2);
+    }
+    .cd { width: 8px; height: 8px; border-radius: 50%; }
+    .cd:nth-child(1) { background: #ff5f57; }
+    .cd:nth-child(2) { background: #ffbd2e; }
+    .cd:nth-child(3) { background: #28ca41; }
+    .code-fname { font-family: var(--mono); font-size: 0.63rem; color: var(--text3); margin-left: 0.4rem; letter-spacing: 0.04em; }
+    pre {
+      padding: 1.5rem 1.3rem;
+      font-family: var(--mono);
+      font-size: 0.71rem;
+      line-height: 1.75;
+      overflow-x: auto;
+      flex: 1;
+      color: var(--text2);
+    }
+    .kw { color: #c792ea; }
+    .ty { color: #82aaff; }
+    .cm { color: var(--text3); font-style: italic; }
+    .nu { color: #f78c6c; }
+    .op { color: var(--text2); }
+    .md { color: #c3e88d; }
+
+    /* pipeline stages diagram */
+    .pipeline-section {
+      margin-top: 2rem;
+      padding: 1.4rem 1.3rem;
+      border-top: 1px solid var(--border);
+    }
+    .pipeline-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.8rem; }
+    .pipeline-stages {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .ps {
+      flex: 1;
+      padding: 0.4rem 0.3rem;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid var(--border2);
+      color: var(--text3);
+      position: relative;
+    }
+    .ps:not(:first-child) { border-left: none; }
+    .ps:first-child { border-radius: 3px 0 0 3px; }
+    .ps:last-child { border-radius: 0 3px 3px 0; }
+    .ps.active { background: var(--gold-muted); border-color: rgba(232,170,30,0.3); color: var(--gold); }
+    .ps.done { background: rgba(255,255,255,0.03); color: var(--text3); }
+
+    /* ── DIVIDER ── */
+    .hr { border: none; border-top: 1px solid var(--border); }
+
+    /* ── NETWORK SECTION ── */
+    .network-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .network-inner { max-width: 1200px; margin: 0 auto; padding: 4rem 2.5rem; }
+    .network-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 2rem;
+    }
+    .net-card {
+      background: var(--bg2);
+      padding: 1.5rem;
+      transition: background 0.2s;
+    }
+    .net-card:hover { background: var(--surface2); }
+    .net-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.7rem; }
+    .net-uni { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; }
+    .net-status {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 2px;
+      letter-spacing: 0.06em;
+    }
+    .ns-active { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+    .ns-pending { background: var(--gold-muted); color: var(--gold); border: 1px solid rgba(232,170,30,0.2); }
+    .ns-out { background: rgba(255,255,255,0.04); color: var(--text3); border: 1px solid var(--border); }
+    .net-name { font-size: 0.95rem; color: var(--text); font-weight: 500; margin-bottom: 0.2rem; }
+    .net-desc { font-size: 0.76rem; color: var(--text3); line-height: 1.5; }
+
+    /* ── PULLQUOTE ── */
+    .pq-wrap {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 0;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .pq-wrap::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--maroon-bright), transparent);
+      margin-left: 2.5rem;
+    }
+    .pq-inner { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem 0 5rem; }
+    .pq-kicker { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+    blockquote {
+      font-family: var(--display);
+      font-size: clamp(1.6rem, 3vw, 2.8rem);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      color: var(--text);
+    }
+    blockquote .hl { color: var(--gold); }
+    blockquote cite {
+      display: block;
+      margin-top: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      font-style: normal;
+      text-transform: uppercase;
+    }
+
+    /* ── TEAM ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .tc {
+      background: var(--surface);
+      padding: 1.3rem 1.5rem;
+      transition: background 0.2s;
+    }
+    .tc:hover { background: var(--surface2); }
+    .tc-role { font-family: var(--mono); font-size: 0.58rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.35rem; }
+    .tc-name { font-size: 0.9rem; color: var(--text); font-weight: 400; }
+    .tc-sub { font-size: 0.72rem; color: var(--text3); margin-top: 0.15rem; }
+    .tc.advisor .tc-name { color: var(--gold); }
+    .tc.open {
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(155,24,41,0.08) 100%);
+    }
+    .tc.open .tc-name { color: var(--text2); font-style: italic; }
+
+    /* ── CONTACT ── */
+    .contact-strip {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 2rem 2.5rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .cs-title { font-family: var(--display); font-size: 1.8rem; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+    .cs-sub { font-size: 0.85rem; color: var(--text2); }
+    .cs-email {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .cs-email:hover { color: var(--gold-bright); }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-left { display: flex; flex-direction: column; gap: 0.25rem; }
+    .footer-brand { font-family: var(--mono); font-size: 0.72rem; color: var(--text2); }
+    .footer-sub { font-size: 0.68rem; color: var(--text3); }
+    .footer-links { display: flex; align-items: center; gap: 1.5rem; }
+    .footer-links a { font-family: var(--mono); font-size: 0.65rem; color: var(--text3); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── KEYFRAMES ── */
+    @keyframes rise {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
 
-    @media (max-width: 700px) {
-      .track-grid { grid-template-columns: 1fr; }
-      .track-card.featured { grid-column: span 1; }
-      .info-grid { grid-template-columns: 1fr; }
-      .stat-bar { flex-direction: column; }
-      .stat { border-right: none; border-bottom: 1px solid var(--border); }
-      .stat:last-child { border-bottom: none; }
-      nav .links { display: none; }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-status { display: none; }
+      .project-card { grid-template-columns: 1fr; }
+      .project-left { border-right: none; border-bottom: 1px solid var(--border); }
+      nav ul { display: none; }
+    }
+    @media (max-width: 620px) {
+      h1 { font-size: 4.5rem; }
+      .section-inner, .network-inner { padding: 3rem 1.5rem; }
+      .contact-strip { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <div class="maroon-bar">University of Minnesota · <span>Ski-U-Mah</span> · Est. 2026</div>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-pill"><span class="dot"></span>Active · Spring 2026</div>
+    <span class="topbar-text">University of Minnesota · College of Science &amp; Engineering · ECE</span>
+    <div class="topbar-pill">Est. 2026</div>
+  </div>
 
+  <!-- NAV -->
   <nav>
-    <div class="inner">
-      <div class="logo">
-        <svg class="logo-m" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 17V1L6 9L11 1L16 9L21 1V17" stroke="#ffcc33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        UMN<span>/</span>ASIC
-      </div>
-      <div class="links">
-        <a href="#tracks">Tracks</a>
-        <a href="#projects">Projects</a>
-        <a href="mailto:umnasicgroup@gmail.com">Contact</a>
-      </div>
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <div class="logo-ic">
+          <svg width="16" height="14" viewBox="0 0 16 14" fill="none">
+            <path d="M1 13V1L5 7.5L8 1L11 7.5L15 1V13" stroke="#e8aa1e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="logo-wordmark">
+          <span class="logo-main">UMN ASIC</span>
+          <span class="logo-sub">Design &amp; EDA Tools</span>
+        </div>
+      </a>
+      <ul>
+        <li><a href="#project">Project</a></li>
+        <li><a href="#network">Network</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="https://github.com/umn-asic-group" target="_blank">GitHub</a></li>
+        <li><a href="mailto:umnasicgroup@gmail.com" class="nav-cta">Join →</a></li>
+      </ul>
     </div>
   </nav>
 
+  <!-- HERO -->
   <section class="hero">
-    <div class="container">
-      <div class="hero-eyebrow">University of Minnesota · ECE · Go Gophers</div>
-      <h1>Build <em>real</em><br>silicon.</h1>
-      <p>The UMN ASIC Group is where you learn to design hardware that actually exists — ASICs, FPGAs, chiplets, and more. No prior experience required.</p>
-      <div class="hero-ctas">
-        <a href="#tracks" class="btn btn-gold">Get Started →</a>
-        <a href="https://github.com/umn-asic-group" class="btn btn-ghost">GitHub Org</a>
-      </div>
+    <div class="hero-traces">
+      <div class="trace trace-h" style="top: 28%; animation-duration: 12s; animation-delay: 0s;"></div>
+      <div class="trace trace-h" style="top: 62%; animation-duration: 9s; animation-delay: -3s; opacity: 0.1;"></div>
+      <div class="trace trace-v" style="right: 25%; animation-duration: 14s; animation-delay: -5s;"></div>
     </div>
-  </section>
+    <div class="hero-glow"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-dots"></div>
 
-  <div class="container">
-    <div class="stat-bar">
-      <div class="stat">
-        <div class="stat-number">1</div>
-        <div class="stat-label">Learning Tracks</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">1</div>
-        <div class="stat-label">Active Projects</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">17K</div>
-        <div class="stat-label">Semiconductor Jobs / yr by 2025</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">~$1T</div>
-        <div class="stat-label">Chip Market by 2030</div>
-      </div>
-    </div>
-  </div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-kicker">
+          <span class="kicker-line"></span>
+          UMN ECE · Go Gophers · Recruiting Now
+        </div>
 
-  <section class="tracks" id="tracks">
-    <div class="container">
-      <div class="section-header">
+        <h1>
+          <span class="l1">Build</span>
+          <span class="l2">Silicon.</span>
+          <span class="l3">ASIC · FPGA · Tapeout · RTL-to-GDS</span>
+        </h1>
+
+        <p class="hero-desc">
+          The UMN ASIC Group designs hardware that <strong>physically exists</strong>. We go from architecture to RTL to synthesized netlist to real chip. Advised by <strong>Prof. Kevin Cao</strong> and connecting with student silicon teams at <strong>Berkeley, Cornell, Georgia Tech,</strong> and <strong>UT Austin</strong>.
+        </p>
+
+        <div class="hero-pills">
+          <span class="pill pill-active">RV32I Core</span>
+          <span class="pill pill-active">RTL-to-GDS</span>
+          <span class="pill">Tapeout Prep</span>
+          <span class="pill">SystemVerilog</span>
+          <span class="pill">Cadence Innovus</span>
+          <span class="pill">Synopsys DC</span>
+          <span class="pill">ChipFoundry</span>
+        </div>
+
+        <div class="hero-btns">
+          <a href="#project" class="btn btn-gold">See the Project →</a>
+          <a href="https://github.com/umn-asic-group" target="_blank" class="btn btn-outline">GitHub Org</a>
+        </div>
       </div>
-      <div class="track-grid">
-        <div class="track-card featured">
-          <h3>RISC-V Processor Core</h3>
-          <p>Build a working RISC-V CPU from scratch in Verilog. Start with individual logic gates, build up to a complete RV32I processor, simulate it in Vivado, and understand how real processors execute instructions. This is the most important project to start with — everything else builds on this foundation.</p>
-          <div class="track-meta">
-            <div class="meta-item">Tools: <span>Vivado, ModelSim</span></div>
-            <div class="meta-item">Language: <span>Verilog</span></div>
-            <div class="meta-item">Hardware: <span>Basys3 FPGA (optional)</span></div>
+
+      <!-- Status card -->
+      <div class="hero-status">
+        <div class="status-card">
+          <div class="status-card-header">
+            <span class="status-card-title">// club status</span>
+            <span class="live-badge"><span class="live-dot"></span>Live</span>
           </div>
-          <span class="track-arrow">→ projects/riscv-core</span>
+          <div class="status-items">
+            <div class="status-item">
+              <div class="si-icon si-icon-gold"></div>
+              <div class="si-text">
+                <div class="si-label">Current Work</div>
+                <div class="si-val">RV32I 5-stage pipeline</div>
+              </div>
+              <span class="si-badge si-badge-yellow">In Progress</span>
+            </div>
+            <div class="status-item">
+              <div class="si-icon si-icon-gold"></div>
+              <div class="si-text">
+                <div class="si-label">Next Target</div>
+                <div class="si-val">RTL-to-GDS flow</div>
+              </div>
+              <span class="si-badge si-badge-yellow">Planning</span>
+            </div>
+            <div class="status-item">
+              <div class="si-icon si-icon-red"></div>
+              <div class="si-text">
+                <div class="si-label">Long Term</div>
+                <div class="si-val">Shuttle tapeout</div>
+              </div>
+              <span class="si-badge si-badge-red">Targeting</span>
+            </div>
+            <div class="status-item">
+              <div class="si-icon si-icon-gray"></div>
+              <div class="si-text">
+                <div class="si-label">Membership</div>
+                <div class="si-val">Open — all ECE levels</div>
+              </div>
+              <span class="si-badge si-badge-green">Recruiting</span>
+            </div>
+          </div>
+          <div class="status-card-footer">
+            <div class="network-label">External contacts</div>
+            <div class="network-nodes">
+              <span class="network-node nn-active">Berkeley</span>
+              <span class="network-node nn-active">Cornell</span>
+              <span class="network-node nn-pending">GT</span>
+              <span class="network-node nn-pending">UT Austin</span>
+              <span class="network-node nn-pending">MIT</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="projects" id="projects">
-    <div class="container">
-      <div class="section-header">
-        <h2>All Projects</h2>
-        <span class="section-tag">OPEN SOURCE</span>
+  <!-- PROJECT -->
+  <section class="section" id="project">
+    <div class="section-inner">
+      <div class="sec-eyebrow">
+        <span class="sec-num">01 / PROJECT</span>
+        <span class="sec-rule"></span>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Repo</th>
-            <th>Level</th>
-            <th>Description</th>
-            <th>Stack</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="proj-name">riscv-core</td>
-            <td>RV32I processor — modules, pipelines, simulation</td>
-            <td>Verilog, Vivado</td>
-          </tr>
-        </tbody>
-      </table>
+      <h2 class="sec-title">RISC-V <span class="accent">Processor</span><br><span class="dim">Core.</span></h2>
+
+      <div class="project-card">
+        <div class="project-left">
+          <div class="proj-tags">
+            <span class="tag tag-gold">Featured</span>
+            <span class="tag tag-red">Active</span>
+            <span class="tag tag-gray">Open Source</span>
+            <span class="tag tag-gray">All Levels</span>
+          </div>
+          <h3>5-Stage Pipelined<br>RV32I Core</h3>
+          <p class="proj-desc">
+            Build a working RISC-V CPU from scratch in Verilog — IF, ID, EX, MEM, WB — with hazard detection, data forwarding, and branch handling. Simulate in Vivado, validate on FPGA, then trace the path from RTL through synthesis and place-and-route toward an actual tapeout. This is the foundation for everything else.
+          </p>
+          <table class="meta-table">
+            <tr><td>Language</td><td>Verilog / SystemVerilog</td></tr>
+            <tr><td>Tools</td><td>Vivado · Synopsys DC · Cadence Innovus</td></tr>
+            <tr><td>Process Target</td><td>Sky130 (SkyWater 130nm)</td></tr>
+            <tr><td>Hardware</td><td>Basys3 / Arty FPGA (optional)</td></tr>
+            <tr><td>ISA</td><td>RV32I → RV64I</td></tr>
+            <tr><td>Partner</td><td>ChipFoundry / chipIgnite</td></tr>
+          </table>
+          <div class="proj-btns">
+            <a href="https://github.com/umn-asic-group" target="_blank" class="btn btn-gold">GitHub →</a>
+            <a href="mailto:umnasicgroup@gmail.com" class="btn btn-outline">Get Involved</a>
+          </div>
+        </div>
+
+        <div class="code-panel">
+          <div class="code-titlebar">
+            <div class="cd"></div><div class="cd"></div><div class="cd"></div>
+            <span class="code-fname">rv32i_pipeline.sv</span>
+          </div>
+<pre><span class="cm">// 5-stage RV32I — Pipeline Core</span>
+<span class="kw">module</span> <span class="ty">rv32i_core</span> <span class="op">#(</span>
+  <span class="kw">parameter</span> <span class="ty">int</span> XLEN = <span class="nu">32</span>
+<span class="op">) (</span>
+  <span class="kw">input</span>  <span class="ty">logic</span>        clk<span class="op">,</span>
+  <span class="kw">input</span>  <span class="ty">logic</span>        rst_n<span class="op">,</span>
+  <span class="kw">output</span> <span class="ty">logic</span> <span class="op">[</span>XLEN<span class="op">-</span><span class="nu">1</span><span class="op">:</span><span class="nu">0</span><span class="op">]</span> dbg_pc<span class="op">,</span>
+  <span class="kw">output</span> <span class="ty">logic</span>        dbg_valid
+<span class="op">);</span>
+
+<span class="cm">// ── IF/ID pipeline register ──</span>
+<span class="ty">logic</span> <span class="op">[</span>XLEN<span class="op">-</span><span class="nu">1</span><span class="op">:</span><span class="nu">0</span><span class="op">]</span> if_id_pc<span class="op">,</span> if_id_instr<span class="op">;</span>
+
+<span class="kw">always_ff</span> <span class="op">@(</span><span class="kw">posedge</span> clk <span class="kw">or</span> <span class="kw">negedge</span> rst_n<span class="op">)</span>
+  <span class="kw">if</span> <span class="op">(!</span>rst_n<span class="op">)</span> <span class="op">{</span>if_id_pc<span class="op">,</span>if_id_instr<span class="op">} <=</span> <span class="nu">'0</span><span class="op">;</span>
+  <span class="kw">else if</span> <span class="op">(!</span>stall<span class="op">) {</span>
+    if_id_pc    <span class="op"><=</span> pc<span class="op">;</span>
+    if_id_instr <span class="op"><=</span> imem_rdata<span class="op">;</span>
+  <span class="op">}</span>
+
+<span class="cm">// ── Hazard + Forward Unit ──</span>
+<span class="ty">hazard_unit</span> u_haz <span class="op">(</span>
+  <span class="op">.</span>rs1_id<span class="op">(</span>id_rs1<span class="op">),</span>
+  <span class="op">.</span>rs2_id<span class="op">(</span>id_rs2<span class="op">),</span>
+  <span class="op">.</span>rd_ex <span class="op">(</span>ex_rd<span class="op">),</span>
+  <span class="op">.</span>rd_mem<span class="op">(</span>mem_rd<span class="op">),</span>
+  <span class="op">.</span>stall <span class="op">(</span>stall<span class="op">),</span>
+  <span class="op">.</span>flush <span class="op">(</span>flush<span class="op">)</span>
+<span class="op">);</span>
+<span class="kw">endmodule</span></pre>
+
+          <div class="pipeline-section">
+            <div class="pipeline-label">Pipeline stages</div>
+            <div class="pipeline-stages">
+              <div class="ps done">IF</div>
+              <div class="ps done">ID</div>
+              <div class="ps active">EX</div>
+              <div class="ps">MEM</div>
+              <div class="ps">WB</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <div class="container">
-    <div class="info-grid" id="tools">
-      <div class="info-card">
-        <h3>group Info</h3>
-        <ul class="info-list">
-          <li><strong>Prof. Kevin Cao</strong> — Faculty Advisor</li>
-          <li><strong>Claire Dietz</strong> — Faculty Advisor</li>
-          <li><strong>Avyukt Raghuvanshi</strong> — President</li>
-          <li><strong>Paulo Dietrich</strong> — Vice-President</li>
-          <li><strong>Madeline Ngo</strong> — Treasurer</li>
-          <li><strong>Ethan Chung, Talis Birmanis</strong> — Officers</li>
-          <li><strong>Open to</strong> all UMN ECE students, all levels</li>
-          <li><a href="mailto:umnasicgroup@gmail.com" style="color:var(--gold)">umnasicgroup@gmail.com</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="quote-section">
+  <!-- PULLQUOTE -->
+  <div class="pq-wrap">
+    <div class="pq-inner">
+      <div class="pq-kicker">Why This Matters</div>
       <blockquote>
-        "More companies building ASICs means <em>more engineers needed</em> to build them — not fewer jobs. The talent shortage is real and growing."
-        <cite>— Semiconductor industry demand outlook, 2026</cite>
+        THE CHIP TALENT <span class="hl">SHORTAGE IS REAL</span> AND GROWING — 17,000 NEW SEMICONDUCTOR ENGINEERS NEEDED PER YEAR. WE'RE BUILDING THE PIPELINE.
+        <cite>— CHIPS Act Workforce Outlook · 2025</cite>
       </blockquote>
     </div>
   </div>
 
+  <!-- NETWORK -->
+  <section class="network-section" id="network">
+    <div class="network-inner">
+      <div class="sec-eyebrow">
+        <span class="sec-num">02 / NETWORK</span>
+        <span class="sec-rule"></span>
+      </div>
+      <h2 class="sec-title">Student <span class="accent">Silicon</span><br><span class="dim">Network.</span></h2>
+      <p style="font-size:0.9rem; color:var(--text2); max-width:560px; line-height:1.75; margin-bottom:0;">
+        We're connecting with student silicon groups at other universities to share physical design knowledge, IP, tapeout experience, and eventually collaborate on shared shuttle slots. No university does this alone.
+      </p>
+      <div class="network-grid">
+        <div class="net-card">
+          <div class="net-card-top">
+            <span class="net-uni">UC Berkeley</span>
+            <span class="net-status ns-active">In Contact</span>
+          </div>
+          <div class="net-name">Tapeout Decal</div>
+          <div class="net-desc">SkyWater 130nm tapeout course. Discussing physical design collaboration and IP reuse on shared process nodes.</div>
+        </div>
+        <div class="net-card">
+          <div class="net-card-top">
+            <span class="net-uni">Cornell</span>
+            <span class="net-status ns-active">Meeting Scheduled</span>
+          </div>
+          <div class="net-name">C2S2</div>
+          <div class="net-desc">Custom Silicon Systems project team. Connected via Prof. Batten — exploring RTL/SoC design collaboration and project alignment.</div>
+        </div>
+        <div class="net-card">
+          <div class="net-card-top">
+            <span class="net-uni">Georgia Tech</span>
+            <span class="net-status ns-pending">Outreach Sent</span>
+          </div>
+          <div class="net-name">SiliconJackets</div>
+          <div class="net-desc">Student-run SoC team covering digital design, verification, physical design, and Code-A-Chip. Strong structural reference.</div>
+        </div>
+        <div class="net-card">
+          <div class="net-card-top">
+            <span class="net-uni">UT Austin</span>
+            <span class="net-status ns-pending">Outreach Sent</span>
+          </div>
+          <div class="net-name">Longhorn Silicon</div>
+          <div class="net-desc">Student-led AI inference accelerator and silicon tapeout pipeline. Parallel goals to UMN ASIC.</div>
+        </div>
+        <div class="net-card">
+          <div class="net-card-top">
+            <span class="net-uni">Industry</span>
+            <span class="net-status ns-active">In Contact</span>
+          </div>
+          <div class="net-name">ChipFoundry / chipIgnite</div>
+          <div class="net-desc">Tapeout partner. Spoke directly about TinyTapeout, shuttle slots, competitions, and shared open-frame multi-university projects.</div>
+        </div>
+        <div class="net-card" style="background: linear-gradient(135deg, var(--bg2) 0%, rgba(155,24,41,0.06) 100%);">
+          <div class="net-card-top">
+            <span class="net-uni">Coming Soon</span>
+            <span class="net-status ns-out">TBD</span>
+          </div>
+          <div class="net-name">CMU · MIT · Stanford</div>
+          <div class="net-desc">Outreach ongoing. Expanding the network to build a genuine inter-university student silicon pipeline.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="section" id="team">
+    <div class="section-inner">
+      <div class="sec-eyebrow">
+        <span class="sec-num">03 / TEAM</span>
+        <span class="sec-rule"></span>
+      </div>
+      <h2 class="sec-title">The <span class="accent">People</span><br><span class="dim">Behind It.</span></h2>
+
+      <div class="team-grid">
+        <div class="tc advisor">
+          <div class="tc-role">Faculty Advisor</div>
+          <div class="tc-name">Prof. Kevin Cao</div>
+          <div class="tc-sub">UMN ECE</div>
+        </div>
+        <div class="tc advisor">
+          <div class="tc-role">Faculty Advisor</div>
+          <div class="tc-name">Claire Dietz</div>
+          <div class="tc-sub">UMN ECE</div>
+        </div>
+        <div class="tc">
+          <div class="tc-role">President</div>
+          <div class="tc-name">Avyukt Raghuvanshi</div>
+          <div class="tc-sub">EE &amp; Physics</div>
+        </div>
+        <div class="tc">
+          <div class="tc-role">Vice-President</div>
+          <div class="tc-name">Paulo Dietrich</div>
+        </div>
+        <div class="tc">
+          <div class="tc-role">Treasurer</div>
+          <div class="tc-name">Madeline Ngo</div>
+        </div>
+        <div class="tc">
+          <div class="tc-role">Officer</div>
+          <div class="tc-name">Ethan Chung</div>
+        </div>
+        <div class="tc">
+          <div class="tc-role">Officer</div>
+          <div class="tc-name">Talis Birmanis</div>
+        </div>
+        <div class="tc open">
+          <div class="tc-role">Membership</div>
+          <div class="tc-name">Open to all UMN ECE/CS students</div>
+          <div class="tc-sub">No prior hardware experience required</div>
+        </div>
+      </div>
+
+      <div class="contact-strip">
+        <div>
+          <div class="cs-title">GET INVOLVED.</div>
+          <div class="cs-sub">Questions about membership, projects, sponsorship, or collaboration? Reach out.</div>
+        </div>
+        <a href="mailto:umnasicgroup@gmail.com" class="cs-email">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+            <rect x="1" y="2.5" width="13" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M1.5 3.5L7.5 9L13.5 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          umnasicgroup@gmail.com
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
   <footer>
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-left">
-          UMN ASIC group · University of Minnesota ECE ·
-          <a href="mailto:umnasicgroup@gmail.com">umnasicgroup@gmail.com</a>
-        </div>
-        <div class="footer-right">
-          <span class="gopher-badge">&#127386; Go Gophers</span>
-        </div>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span class="footer-brand">UMN ASIC Group · University of Minnesota ECE</span>
+        <span class="footer-sub">Est. 2026 · Open Source · Advisor: Prof. Kevin Cao</span>
+      </div>
+      <div class="footer-links">
+        <a href="#project">Project</a>
+        <a href="#network">Network</a>
+        <a href="#team">Team</a>
+        <a href="https://github.com/umn-asic-group" target="_blank">GitHub</a>
+        <a href="mailto:umnasicgroup@gmail.com">Email</a>
+        <span style="font-family: var(--mono); font-size: 0.65rem; color: var(--text3);">🐿 Go Gophers</span>
       </div>
     </div>
   </footer>
