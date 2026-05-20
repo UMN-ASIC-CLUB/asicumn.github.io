@@ -49,7 +49,6 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    /* ── CIRCUIT CANVAS ── */
     #circuit-canvas {
       position: fixed;
       top: 0; left: 0;
@@ -58,7 +57,6 @@
       z-index: 0;
     }
 
-    /* ── TOPBAR ── */
     .topbar {
       background: linear-gradient(90deg, var(--maroon) 0%, #5a0d19 100%);
       padding: 0.45rem 2rem;
@@ -93,7 +91,6 @@
     .topbar-pill .dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
     .topbar-text { font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.55); letter-spacing: 0.12em; text-transform: uppercase; }
 
-    /* ── NAV ── */
     nav {
       position: sticky;
       top: 0;
@@ -135,7 +132,6 @@
     .nav-cta { background: var(--maroon-bright) !important; color: #fff !important; padding: 0.38rem 1rem; border-radius: 3px; transition: background 0.2s !important; }
     .nav-cta:hover { background: #e0283f !important; }
 
-    /* ── HERO ── */
     .hero {
       min-height: 94vh;
       display: flex;
@@ -249,6 +245,7 @@
     .si-icon-gold { background: var(--gold-muted); }
     .si-icon-red { background: var(--maroon-glow2); }
     .si-icon-gray { background: rgba(255,255,255,0.04); }
+    .si-icon-green { background: rgba(74,222,128,0.08); }
     .si-text { flex: 1; }
     .si-label { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; }
     .si-val { font-size: 0.85rem; color: var(--text); font-weight: 400; margin-top: 0.1rem; }
@@ -263,7 +260,6 @@
     .nn-active { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.2); color: #4ade80; }
     .nn-pending { background: var(--gold-muted); border-color: rgba(232,170,30,0.2); color: var(--gold); }
 
-    /* ── SECTIONS ── */
     .section { position: relative; }
     .section-inner { max-width: 1200px; margin: 0 auto; padding: 5rem 2.5rem; }
     .sec-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
@@ -273,7 +269,9 @@
     .sec-title .accent { color: var(--gold); }
     .sec-title .dim { color: var(--text3); }
 
-    /* ── PROJECT CARD ── */
+    /* Project card divider between two cards */
+    .project-cards { display: flex; flex-direction: column; gap: 2rem; }
+
     .project-card {
       display: grid; grid-template-columns: 1fr 1fr; gap: 0;
       background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; overflow: hidden; position: relative;
@@ -282,12 +280,17 @@
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, var(--maroon-bright) 0%, var(--gold-dim) 60%, transparent 100%);
     }
+    /* Tapeout candidate card — gold top accent */
+    .project-card.tapeout-card::before {
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold-dim) 60%, transparent 100%);
+    }
     .project-left { padding: 2.5rem; border-right: 1px solid var(--border); }
     .proj-tags { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .tag { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 2px; }
     .tag-gold { background: var(--gold-muted); color: var(--gold); border: 1px solid rgba(232,170,30,0.25); }
     .tag-gray { background: rgba(255,255,255,0.04); color: var(--text3); border: 1px solid var(--border); }
     .tag-red { background: var(--maroon-glow); color: #e05070; border: 1px solid rgba(196,30,53,0.2); }
+    .tag-green { background: rgba(74,222,128,0.08); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
     .project-left h3 { font-family: var(--display); font-size: 2.2rem; letter-spacing: 0.05em; line-height: 0.95; margin-bottom: 1rem; }
     .proj-desc { font-size: 0.88rem; color: var(--text2); line-height: 1.75; margin-bottom: 2rem; }
     .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
@@ -327,7 +330,41 @@
     .ps.active { background: var(--gold-muted); border-color: rgba(232,170,30,0.3); color: var(--gold); }
     .ps.done { background: rgba(255,255,255,0.03); color: var(--text3); }
 
-    /* ── NETWORK ── */
+    /* Systolic array viz */
+    .sa-viz { padding: 1.5rem 1.3rem; display: flex; flex-direction: column; gap: 1.2rem; flex: 1; justify-content: center; }
+    .sa-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .sa-grid-wrap { display: flex; align-items: center; justify-content: center; }
+    .sa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .sa-pe {
+      width: 70px; height: 70px; border: 1px solid rgba(232,170,30,0.3);
+      background: var(--gold-muted); border-radius: 6px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    }
+    .sa-pe-label { font-family: var(--mono); font-size: 0.58rem; color: var(--gold); letter-spacing: 0.06em; }
+    .sa-pe-sub { font-family: var(--mono); font-size: 0.5rem; color: var(--text3); }
+    .sa-arrows { display: flex; align-items: center; justify-content: center; gap: 1rem; font-family: var(--mono); font-size: 0.62rem; color: var(--text3); }
+    .sa-arrow-block { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+    .arrow-sym { font-size: 1rem; color: var(--maroon-bright); }
+
+    /* Funding banner */
+    .funding-banner {
+      margin: 2.5rem 0 0;
+      display: flex; align-items: center; gap: 1.2rem;
+      background: rgba(232,170,30,0.06);
+      border: 1px solid rgba(232,170,30,0.25);
+      border-left: 3px solid var(--gold);
+      border-radius: 6px;
+      padding: 1rem 1.4rem;
+    }
+    .fb-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .fb-text { }
+    .fb-label { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.2rem; }
+    .fb-value { font-family: var(--display); font-size: 1.5rem; letter-spacing: 0.05em; color: var(--gold); line-height: 1; }
+    .fb-sub { font-size: 0.78rem; color: var(--text2); margin-top: 0.2rem; }
+    .fb-divider { width: 1px; height: 40px; background: var(--border2); flex-shrink: 0; }
+    .fb-detail { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
+    .fb-detail strong { color: var(--text); font-weight: 400; }
+
     .network-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .network-inner { max-width: 1200px; margin: 0 auto; padding: 4rem 2.5rem; }
     .network-grid {
@@ -345,7 +382,6 @@
     .net-name { font-size: 0.95rem; color: var(--text); font-weight: 500; margin-bottom: 0.2rem; }
     .net-desc { font-size: 0.76rem; color: var(--text3); line-height: 1.5; }
 
-    /* ── PULLQUOTE ── */
     .pq-wrap {
       border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
       padding: 4rem 0; background: var(--bg); position: relative; overflow: hidden;
@@ -360,7 +396,6 @@
     blockquote .hl { color: var(--gold); }
     blockquote cite { display: block; margin-top: 1.5rem; font-family: var(--mono); font-size: 0.65rem; color: var(--text3); letter-spacing: 0.1em; font-style: normal; text-transform: uppercase; }
 
-    /* ── TEAM ── */
     .team-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
@@ -374,7 +409,6 @@
     .tc.open { background: linear-gradient(135deg, var(--surface) 0%, rgba(155,24,41,0.08) 100%); }
     .tc.open .tc-name { color: var(--text2); font-style: italic; }
 
-    /* ── CONTACT ── */
     .contact-strip {
       display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2rem;
       background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
@@ -385,7 +419,6 @@
     .cs-email { font-family: var(--mono); font-size: 0.82rem; color: var(--gold); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.2s; white-space: nowrap; }
     .cs-email:hover { color: var(--gold-bright); }
 
-    /* ── FOOTER ── */
     footer { border-top: 1px solid var(--border); padding: 2rem 0; }
     .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
     .footer-left { display: flex; flex-direction: column; gap: 0.25rem; }
@@ -395,7 +428,6 @@
     .footer-links a { font-family: var(--mono); font-size: 0.65rem; color: var(--text3); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
     .footer-links a:hover { color: var(--gold); }
 
-    /* ── KEYFRAMES ── */
     @keyframes rise {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -405,13 +437,14 @@
       50% { opacity: 0.25; }
     }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 960px) {
       .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
       .hero-status { display: none; }
       .project-card { grid-template-columns: 1fr; }
       .project-left { border-right: none; border-bottom: 1px solid var(--border); }
       nav ul { display: none; }
+      .funding-banner { flex-direction: column; align-items: flex-start; }
+      .fb-divider { display: none; }
     }
     @media (max-width: 620px) {
       h1 { font-size: 4.5rem; }
@@ -422,17 +455,14 @@
 </head>
 <body>
 
-  <!-- ANIMATED CIRCUIT BACKGROUND -->
   <canvas id="circuit-canvas"></canvas>
 
-  <!-- TOP BAR -->
   <div class="topbar">
     <div class="topbar-pill"><span class="dot"></span>Active · Spring 2026</div>
     <span class="topbar-text">University of Minnesota · College of Science &amp; Engineering · ECE</span>
     <div class="topbar-pill">Est. 2026</div>
   </div>
 
-  <!-- NAV -->
   <nav>
     <div class="nav-inner">
       <a href="#" class="logo">
@@ -456,7 +486,6 @@
     </div>
   </nav>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-traces">
       <div class="trace trace-h" style="top: 28%; animation-duration: 12s; animation-delay: 0s;"></div>
@@ -483,6 +512,7 @@
         </p>
         <div class="hero-pills">
           <span class="pill pill-active">RV32I Core</span>
+          <span class="pill pill-active">Systolic Array</span>
           <span class="pill pill-active">RTL-to-GDS</span>
           <span class="pill">Tapeout Prep</span>
           <span class="pill">SystemVerilog</span>
@@ -491,7 +521,7 @@
           <span class="pill">ChipFoundry</span>
         </div>
         <div class="hero-btns">
-          <a href="#project" class="btn btn-gold">See the Project →</a>
+          <a href="#project" class="btn btn-gold">See the Projects →</a>
           <a href="https://github.com/UMN-ASIC-CLUB" target="_blank" class="btn btn-outline">GitHub Org</a>
         </div>
       </div>
@@ -506,7 +536,7 @@
             <div class="status-item">
               <div class="si-icon si-icon-gold"></div>
               <div class="si-text">
-                <div class="si-label">Current Work</div>
+                <div class="si-label">Project 1</div>
                 <div class="si-val">RV32I 5-stage pipeline</div>
               </div>
               <span class="si-badge si-badge-yellow">In Progress</span>
@@ -514,18 +544,18 @@
             <div class="status-item">
               <div class="si-icon si-icon-gold"></div>
               <div class="si-text">
-                <div class="si-label">Next Target</div>
-                <div class="si-val">RTL-to-GDS flow</div>
+                <div class="si-label">Project 2</div>
+                <div class="si-val">2×2 Systolic Array</div>
               </div>
-              <span class="si-badge si-badge-yellow">Planning</span>
+              <span class="si-badge si-badge-red">Tapeout Candidate</span>
             </div>
             <div class="status-item">
-              <div class="si-icon si-icon-red"></div>
+              <div class="si-icon si-icon-green"></div>
               <div class="si-text">
-                <div class="si-label">Long Term</div>
-                <div class="si-val">Shuttle tapeout</div>
+                <div class="si-label">ECE Dept. Funding</div>
+                <div class="si-val">$20,000 awarded</div>
               </div>
-              <span class="si-badge si-badge-red">Targeting</span>
+              <span class="si-badge si-badge-green">Secured</span>
             </div>
             <div class="status-item">
               <div class="si-icon si-icon-gray"></div>
@@ -551,44 +581,47 @@
     </div>
   </section>
 
-  <!-- PROJECT -->
   <section class="section" id="project">
     <div class="section-inner">
       <div class="sec-eyebrow">
-        <span class="sec-num">01 / PROJECT</span>
+        <span class="sec-num">01 / PROJECTS</span>
         <span class="sec-rule"></span>
       </div>
-      <h2 class="sec-title">RISC-V <span class="accent">Processor</span><br><span class="dim">Core.</span></h2>
-      <div class="project-card">
-        <div class="project-left">
-          <div class="proj-tags">
-            <span class="tag tag-gold">Featured</span>
-            <span class="tag tag-red">Active</span>
-            <span class="tag tag-gray">Open Source</span>
-            <span class="tag tag-gray">All Levels</span>
+      <h2 class="sec-title">What We're <span class="accent">Building</span><br><span class="dim">Right Now.</span></h2>
+
+      <div class="project-cards">
+
+        <!-- PROJECT 1: RV32I -->
+        <div class="project-card">
+          <div class="project-left">
+            <div class="proj-tags">
+              <span class="tag tag-gold">Featured</span>
+              <span class="tag tag-red">Active</span>
+              <span class="tag tag-gray">Open Source</span>
+              <span class="tag tag-gray">All Levels</span>
+            </div>
+            <h3>5-Stage Pipelined<br>RV32I Core</h3>
+            <p class="proj-desc">
+              Build a working RISC-V CPU from scratch in Verilog — IF, ID, EX, MEM, WB — with hazard detection, data forwarding, and branch handling. Simulate in Vivado, validate on FPGA, then trace the path from RTL through synthesis and place-and-route toward an actual tapeout. This is the foundation for everything else.
+            </p>
+            <table class="meta-table">
+              <tr><td>Language</td><td>Verilog / SystemVerilog</td></tr>
+              <tr><td>Tools</td><td>Vivado · Synopsys DC · Cadence Innovus</td></tr>
+              <tr><td>Process Target</td><td>Sky130 (SkyWater 130nm)</td></tr>
+              <tr><td>Hardware</td><td>Basys3 / Arty FPGA (optional)</td></tr>
+              <tr><td>ISA</td><td>RV32I → RV64I</td></tr>
+              <tr><td>Partner</td><td>ChipFoundry / chipIgnite</td></tr>
+            </table>
+            <div class="proj-btns">
+              <a href="https://github.com/UMN-ASIC-CLUB" target="_blank" class="btn btn-gold">GitHub →</a>
+              <a href="mailto:umnasicgroup@gmail.com" class="btn btn-outline">Get Involved</a>
+            </div>
           </div>
-          <h3>5-Stage Pipelined<br>RV32I Core</h3>
-          <p class="proj-desc">
-            Build a working RISC-V CPU from scratch in Verilog — IF, ID, EX, MEM, WB — with hazard detection, data forwarding, and branch handling. Simulate in Vivado, validate on FPGA, then trace the path from RTL through synthesis and place-and-route toward an actual tapeout. This is the foundation for everything else.
-          </p>
-          <table class="meta-table">
-            <tr><td>Language</td><td>Verilog / SystemVerilog</td></tr>
-            <tr><td>Tools</td><td>Vivado · Synopsys DC · Cadence Innovus</td></tr>
-            <tr><td>Process Target</td><td>Sky130 (SkyWater 130nm)</td></tr>
-            <tr><td>Hardware</td><td>Basys3 / Arty FPGA (optional)</td></tr>
-            <tr><td>ISA</td><td>RV32I → RV64I</td></tr>
-            <tr><td>Partner</td><td>ChipFoundry / chipIgnite</td></tr>
-          </table>
-          <div class="proj-btns">
-            <a href="https://github.com/UMN-ASIC-CLUB" target="_blank" class="btn btn-gold">GitHub →</a>
-            <a href="mailto:umnasicgroup@gmail.com" class="btn btn-outline">Get Involved</a>
-          </div>
-        </div>
-        <div class="code-panel">
-          <div class="code-titlebar">
-            <div class="cd"></div><div class="cd"></div><div class="cd"></div>
-            <span class="code-fname">rv32i_pipeline.sv</span>
-          </div>
+          <div class="code-panel">
+            <div class="code-titlebar">
+              <div class="cd"></div><div class="cd"></div><div class="cd"></div>
+              <span class="code-fname">rv32i_pipeline.sv</span>
+            </div>
 <pre><span class="cm">// 5-stage RV32I — Pipeline Core</span>
 <span class="kw">module</span> <span class="ty">rv32i_core</span> <span class="op">#(</span>
   <span class="kw">parameter</span> <span class="ty">int</span> XLEN = <span class="nu">32</span>
@@ -619,22 +652,110 @@
   <span class="op">.</span>flush <span class="op">(</span>flush<span class="op">)</span>
 <span class="op">);</span>
 <span class="kw">endmodule</span></pre>
-          <div class="pipeline-section">
-            <div class="pipeline-label">Pipeline stages</div>
-            <div class="pipeline-stages">
-              <div class="ps done">IF</div>
-              <div class="ps done">ID</div>
-              <div class="ps active">EX</div>
-              <div class="ps">MEM</div>
-              <div class="ps">WB</div>
+            <div class="pipeline-section">
+              <div class="pipeline-label">Pipeline stages</div>
+              <div class="pipeline-stages">
+                <div class="ps done">IF</div>
+                <div class="ps done">ID</div>
+                <div class="ps active">EX</div>
+                <div class="ps">MEM</div>
+                <div class="ps">WB</div>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- PROJECT 2: SYSTOLIC ARRAY -->
+        <div class="project-card tapeout-card">
+          <div class="project-left">
+            <div class="proj-tags">
+              <span class="tag tag-gold">Tapeout Candidate</span>
+              <span class="tag tag-green">$20K Funded</span>
+              <span class="tag tag-red">Active</span>
+              <span class="tag tag-gray">Open Source</span>
+            </div>
+            <h3>2×2 Systolic Array<br>Matrix Mult</h3>
+            <p class="proj-desc">
+              A 2×2 systolic array accelerator for matrix multiplication — four processing elements passing partial sums in a wave front pattern, fully pipelined with registered inputs and outputs. Compact area footprint, deterministic timing, and a clean RTL-to-GDS story make this our strongest first tapeout candidate. Backed by <strong>$20,000 in ECE Department funding</strong>.
+            </p>
+            <table class="meta-table">
+              <tr><td>Architecture</td><td>2×2 systolic array, weight-stationary</td></tr>
+              <tr><td>Operation</td><td>INT8 matrix multiply (A × B = C)</td></tr>
+              <tr><td>Language</td><td>SystemVerilog</td></tr>
+              <tr><td>Tools</td><td>Synopsys DC · Cadence Innovus · Magic</td></tr>
+              <tr><td>Process Target</td><td>Sky130 (SkyWater 130nm)</td></tr>
+              <tr><td>Tapeout Path</td><td>TinyTapeout / chipIgnite shuttle</td></tr>
+            </table>
+            <div class="proj-btns">
+              <a href="https://github.com/UMN-ASIC-CLUB" target="_blank" class="btn btn-gold">GitHub →</a>
+              <a href="mailto:umnasicgroup@gmail.com" class="btn btn-outline">Collaborate</a>
+            </div>
+          </div>
+          <div class="code-panel">
+            <div class="code-titlebar">
+              <div class="cd"></div><div class="cd"></div><div class="cd"></div>
+              <span class="code-fname">systolic_array_2x2.sv</span>
+            </div>
+<pre><span class="cm">// 2×2 Systolic Array — Matrix Multiply</span>
+<span class="kw">module</span> <span class="ty">pe</span> <span class="op">#(</span><span class="kw">parameter</span> W = <span class="nu">8</span><span class="op">) (</span>
+  <span class="kw">input</span>  <span class="ty">logic</span>             clk<span class="op">,</span>
+  <span class="kw">input</span>  <span class="ty">logic</span> <span class="op">[</span>W<span class="op">-</span><span class="nu">1</span><span class="op">:</span><span class="nu">0</span><span class="op">]</span>    a_in<span class="op">,</span> b_in<span class="op">,</span>
+  <span class="kw">output</span> <span class="ty">logic</span> <span class="op">[</span>W<span class="op">-</span><span class="nu">1</span><span class="op">:</span><span class="nu">0</span><span class="op">]</span>    a_out<span class="op">,</span> b_out<span class="op">,</span>
+  <span class="kw">output</span> <span class="ty">logic</span> <span class="op">[</span><span class="nu">2</span><span class="op">*</span>W<span class="op">-</span><span class="nu">1</span><span class="op">:</span><span class="nu">0</span><span class="op">]</span> acc
+<span class="op">);</span>
+  <span class="kw">always_ff</span> <span class="op">@(</span><span class="kw">posedge</span> clk<span class="op">) begin</span>
+    a_out <span class="op"><=</span> a_in<span class="op">;</span>   <span class="cm">// pass east</span>
+    b_out <span class="op"><=</span> b_in<span class="op">;</span>   <span class="cm">// pass south</span>
+    acc   <span class="op"><=</span> acc <span class="op">+</span> a_in <span class="op">*</span> b_in<span class="op">;</span>
+  <span class="kw">end</span>
+<span class="kw">endmodule</span>
+
+<span class="kw">module</span> <span class="ty">systolic_2x2</span> <span class="op">(</span>
+  <span class="kw">input</span>  <span class="ty">logic</span>       clk<span class="op">,</span> rst_n<span class="op">,</span>
+  <span class="kw">input</span>  <span class="ty">logic</span> <span class="op">[</span><span class="nu">7</span><span class="op">:</span><span class="nu">0</span><span class="op">]</span> a<span class="op">[</span><span class="nu">0</span><span class="op">:</span><span class="nu">1</span><span class="op">],</span> b<span class="op">[</span><span class="nu">0</span><span class="op">:</span><span class="nu">1</span><span class="op">],</span>
+  <span class="kw">output</span> <span class="ty">logic</span> <span class="op">[</span><span class="nu">15</span><span class="op">:</span><span class="nu">0</span><span class="op">]</span> c<span class="op">[</span><span class="nu">0</span><span class="op">:</span><span class="nu">1</span><span class="op">][</span><span class="nu">0</span><span class="op">:</span><span class="nu">1</span><span class="op">]</span>
+<span class="op">);</span>
+  <span class="cm">// 4 PEs wired in 2×2 mesh</span>
+  <span class="ty">pe</span> u00<span class="op">(</span>clk<span class="op">,</span> a<span class="op">[</span><span class="nu">0</span><span class="op">],</span> b<span class="op">[</span><span class="nu">0</span><span class="op">],</span> <span class="op">...</span> c<span class="op">[</span><span class="nu">0</span><span class="op">][</span><span class="nu">0</span><span class="op">]);</span>
+  <span class="ty">pe</span> u01<span class="op">(</span>clk<span class="op">,</span> a_h00<span class="op">,</span>  b<span class="op">[</span><span class="nu">1</span><span class="op">],</span> <span class="op">...</span> c<span class="op">[</span><span class="nu">0</span><span class="op">][</span><span class="nu">1</span><span class="op">]);</span>
+  <span class="ty">pe</span> u10<span class="op">(</span>clk<span class="op">,</span> a<span class="op">[</span><span class="nu">1</span><span class="op">],</span> b_v00<span class="op">,</span> <span class="op">...</span> c<span class="op">[</span><span class="nu">1</span><span class="op">][</span><span class="nu">0</span><span class="op">]);</span>
+  <span class="ty">pe</span> u11<span class="op">(</span>clk<span class="op">,</span> a_h10<span class="op">,</span>  b_v01<span class="op">,</span> <span class="op">...</span> c<span class="op">[</span><span class="nu">1</span><span class="op">][</span><span class="nu">1</span><span class="op">]);</span>
+<span class="kw">endmodule</span></pre>
+            <div class="pipeline-section">
+              <div class="sa-label">PE array — 2×2 mesh</div>
+              <div class="sa-grid-wrap">
+                <div class="sa-grid">
+                  <div class="sa-pe"><span class="sa-pe-label">PE[0,0]</span><span class="sa-pe-sub">acc += a·b</span></div>
+                  <div class="sa-pe"><span class="sa-pe-label">PE[0,1]</span><span class="sa-pe-sub">acc += a·b</span></div>
+                  <div class="sa-pe"><span class="sa-pe-label">PE[1,0]</span><span class="sa-pe-sub">acc += a·b</span></div>
+                  <div class="sa-pe"><span class="sa-pe-label">PE[1,1]</span><span class="sa-pe-sub">acc += a·b</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.project-cards -->
+
+      <!-- FUNDING BANNER -->
+      <div class="funding-banner">
+        <div class="fb-icon">🏛</div>
+        <div class="fb-text">
+          <div class="fb-label">ECE Department Grant</div>
+          <div class="fb-value">$20,000</div>
+          <div class="fb-sub">University of Minnesota College of Science &amp; Engineering</div>
+        </div>
+        <div class="fb-divider"></div>
+        <div class="fb-detail">
+          Awarded to support physical design tooling, EDA licenses, FPGA hardware, and shuttle tapeout costs.
+          The systolic array project is our <strong>primary tapeout candidate</strong> — compact enough for a first shuttle slot,
+          meaningful enough to demonstrate real silicon design capability.
+        </div>
       </div>
+
     </div>
   </section>
 
-  <!-- PULLQUOTE -->
   <div class="pq-wrap">
     <div class="pq-inner">
       <div class="pq-kicker">Why This Matters</div>
@@ -645,7 +766,6 @@
     </div>
   </div>
 
-  <!-- NETWORK -->
   <section class="network-section" id="network">
     <div class="network-inner">
       <div class="sec-eyebrow">
@@ -658,40 +778,29 @@
       </p>
       <div class="network-grid">
         <div class="net-card">
-          <div class="net-card-top"><span class="net-uni">UC Berkeley</span><span class="net-status ns-active">In Contact</span></div>
+          <div class="net-card-top"><span class="net-uni">UC Berkeley</span></div>
           <div class="net-name">Tapeout Decal</div>
           <div class="net-desc">SkyWater 130nm tapeout course. Discussing physical design collaboration and IP reuse on shared process nodes.</div>
         </div>
         <div class="net-card">
-          <div class="net-card-top"><span class="net-uni">Cornell</span><span class="net-status ns-active">Meeting Scheduled</span></div>
+          <div class="net-card-top"><span class="net-uni">Cornell</span></div>
           <div class="net-name">C2S2</div>
           <div class="net-desc">Custom Silicon Systems project team. Connected via Prof. Batten — exploring RTL/SoC design collaboration and project alignment.</div>
         </div>
         <div class="net-card">
-          <div class="net-card-top"><span class="net-uni">Georgia Tech</span><span class="net-status ns-pending">Outreach Sent</span></div>
+          <div class="net-card-top"><span class="net-uni">Georgia Tech</span></div>
           <div class="net-name">SiliconJackets</div>
           <div class="net-desc">Student-run SoC team covering digital design, verification, physical design, and Code-A-Chip. Strong structural reference.</div>
-        </div>
-        <div class="net-card">
-          <div class="net-card-top"><span class="net-uni">UT Austin</span><span class="net-status ns-pending">Outreach Sent</span></div>
-          <div class="net-name">Longhorn Silicon</div>
-          <div class="net-desc">Student-led AI inference accelerator and silicon tapeout pipeline. Parallel goals to UMN ASIC.</div>
         </div>
         <div class="net-card">
           <div class="net-card-top"><span class="net-uni">Industry</span><span class="net-status ns-active">In Contact</span></div>
           <div class="net-name">ChipFoundry / chipIgnite</div>
           <div class="net-desc">Tapeout partner. Spoke directly about TinyTapeout, shuttle slots, competitions, and shared open-frame multi-university projects.</div>
         </div>
-        <div class="net-card" style="background: linear-gradient(135deg, var(--bg2) 0%, rgba(155,24,41,0.06) 100%);">
-          <div class="net-card-top"><span class="net-uni">Coming Soon</span><span class="net-status ns-out">TBD</span></div>
-          <div class="net-name">CMU · MIT · Stanford</div>
-          <div class="net-desc">Outreach ongoing. Expanding the network to build a genuine inter-university student silicon pipeline.</div>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- TEAM -->
   <section class="section" id="team">
     <div class="section-inner">
       <div class="sec-eyebrow">
@@ -725,15 +834,14 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
       <div class="footer-left">
         <span class="footer-brand">UMN ASIC Group · University of Minnesota ECE</span>
-        <span class="footer-sub">Est. 2026 · Open Source · Advisor: Prof. Kevin Cao</span>
+        <span class="footer-sub">Est. 2026 · Open Source · Advisor: Prof. Kevin Cao · $20K ECE Dept. Grant</span>
       </div>
       <div class="footer-links">
-        <a href="#project">Project</a>
+        <a href="#project">Projects</a>
         <a href="#network">Network</a>
         <a href="#team">Team</a>
         <a href="https://github.com/UMN-ASIC-CLUB" target="_blank">GitHub</a>
@@ -743,211 +851,79 @@
     </div>
   </footer>
 
-  <!-- ════════════════════════════════════════
-       ANIMATED PCB CIRCUIT BOARD BACKGROUND
-       Canvas fills the viewport, fixed behind
-       all content. Draws a sparse grid of pad
-       nodes connected by L-shaped copper traces,
-       with glowing signal pulses travelling along them.
-       Colors: gold (#a97810), maroon (#9b1829), dim white.
-  ════════════════════════════════════════ -->
   <script>
   (function () {
     var canvas = document.getElementById('circuit-canvas');
     var ctx    = canvas.getContext('2d');
-
     var W, H;
     var nodes  = [];
     var traces = [];
     var pulses = [];
     var GRID   = 90;
-
-    /* colour bases — kept as prefix strings so we can append alpha */
     var C_GOLD   = '169,120,16';
     var C_MAROON = '155,24,41';
     var C_DIM    = '82,75,98';
-
     function rnd(min, max) { return min + Math.random() * (max - min); }
     function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-    /* ── Build scene ─────────────────────────── */
     function build() {
-      nodes  = [];
-      traces = [];
-      pulses = [];
-
+      nodes  = []; traces = []; pulses = [];
       var cols = Math.ceil(W / GRID) + 2;
       var rows = Math.ceil(H / GRID) + 2;
-
-      /* Sparse node grid — ~32 % occupancy */
       for (var r = 0; r < rows; r++) {
         for (var c = 0; c < cols; c++) {
           if (Math.random() > 0.32) continue;
           var col = pick([C_GOLD, C_GOLD, C_MAROON, C_DIM]);
-          nodes.push({
-            x:    c * GRID + rnd(-6, 6),
-            y:    r * GRID + rnd(-6, 6),
-            r:    rnd(1.6, 3.4),
-            kind: pick(['dot', 'sq', 'ring']),
-            col:  col,
-            a:    rnd(0.10, 0.22)
-          });
+          nodes.push({ x: c * GRID + rnd(-6, 6), y: r * GRID + rnd(-6, 6), r: rnd(1.6, 3.4), kind: pick(['dot', 'sq', 'ring']), col: col, a: rnd(0.10, 0.22) });
         }
       }
-
-      /* Connect nearby node pairs with orthogonal traces */
       var n = nodes.length;
       for (var i = 0; i < n; i++) {
-        var a = nodes[i];
-        /* find up to 2 close neighbours */
-        var found = 0;
+        var a = nodes[i]; var found = 0;
         for (var j = i + 1; j < n && found < 2; j++) {
           if (Math.random() > 0.50) continue;
-          var b  = nodes[j];
-          var dx = b.x - a.x;
-          var dy = b.y - a.y;
+          var b = nodes[j]; var dx = b.x - a.x; var dy = b.y - a.y;
           if (Math.sqrt(dx*dx + dy*dy) > GRID * 1.65) continue;
-          traces.push({
-            ax: a.x, ay: a.y,
-            bx: b.x, by: b.y,
-            horiz: Math.random() < 0.5,          /* L-bend direction */
-            col:   pick([C_GOLD, C_GOLD, C_MAROON, C_DIM]),
-            a:     rnd(0.04, 0.11),
-            w:     rnd(0.4, 1.0)
-          });
+          traces.push({ ax: a.x, ay: a.y, bx: b.x, by: b.y, horiz: Math.random() < 0.5, col: pick([C_GOLD, C_GOLD, C_MAROON, C_DIM]), a: rnd(0.04, 0.11), w: rnd(0.4, 1.0) });
           found++;
         }
       }
     }
-
-    /* ── Resize ──────────────────────────────── */
-    function resize() {
-      W = canvas.width  = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-      build();
-    }
-
-    /* ── Draw pad ────────────────────────────── */
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; build(); }
     function drawPad(nd) {
-      var fill   = 'rgba(' + nd.col + ',' + nd.a + ')';
-      var stroke = 'rgba(' + nd.col + ',' + (nd.a * 1.8) + ')';
-      ctx.fillStyle   = fill;
-      ctx.strokeStyle = stroke;
-      ctx.lineWidth   = 0.7;
-      if (nd.kind === 'dot') {
-        ctx.beginPath();
-        ctx.arc(nd.x, nd.y, nd.r, 0, 6.283);
-        ctx.fill();
-      } else if (nd.kind === 'sq') {
-        ctx.fillRect(nd.x - nd.r, nd.y - nd.r, nd.r * 2, nd.r * 2);
-      } else {                          /* ring */
-        ctx.beginPath();
-        ctx.arc(nd.x, nd.y, nd.r * 1.5, 0, 6.283);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(nd.x, nd.y, nd.r * 0.45, 0, 6.283);
-        ctx.fill();
-      }
+      var fill = 'rgba(' + nd.col + ',' + nd.a + ')'; var stroke = 'rgba(' + nd.col + ',' + (nd.a * 1.8) + ')';
+      ctx.fillStyle = fill; ctx.strokeStyle = stroke; ctx.lineWidth = 0.7;
+      if (nd.kind === 'dot') { ctx.beginPath(); ctx.arc(nd.x, nd.y, nd.r, 0, 6.283); ctx.fill(); }
+      else if (nd.kind === 'sq') { ctx.fillRect(nd.x - nd.r, nd.y - nd.r, nd.r * 2, nd.r * 2); }
+      else { ctx.beginPath(); ctx.arc(nd.x, nd.y, nd.r * 1.5, 0, 6.283); ctx.stroke(); ctx.beginPath(); ctx.arc(nd.x, nd.y, nd.r * 0.45, 0, 6.283); ctx.fill(); }
     }
-
-    /* ── Draw trace ──────────────────────────── */
-    function drawTrace(t) {
-      ctx.strokeStyle = 'rgba(' + t.col + ',' + t.a + ')';
-      ctx.lineWidth   = t.w;
-      ctx.beginPath();
-      ctx.moveTo(t.ax, t.ay);
-      if (t.horiz) {
-        ctx.lineTo(t.bx, t.ay);
-        ctx.lineTo(t.bx, t.by);
-      } else {
-        ctx.lineTo(t.ax, t.by);
-        ctx.lineTo(t.bx, t.by);
-      }
-      ctx.stroke();
-    }
-
-    /* ── Position along trace [0..1] ────────── */
+    function drawTrace(t) { ctx.strokeStyle = 'rgba(' + t.col + ',' + t.a + ')'; ctx.lineWidth = t.w; ctx.beginPath(); ctx.moveTo(t.ax, t.ay); if (t.horiz) { ctx.lineTo(t.bx, t.ay); ctx.lineTo(t.bx, t.by); } else { ctx.lineTo(t.ax, t.by); ctx.lineTo(t.bx, t.by); } ctx.stroke(); }
     function posOnTrace(t, p) {
       var s1, s2, tot, r;
-      if (t.horiz) {
-        s1 = Math.abs(t.bx - t.ax);
-        s2 = Math.abs(t.by - t.ay);
-        tot = s1 + s2;
-        if (p * tot <= s1) {
-          return { x: t.ax + (t.bx - t.ax) * (p * tot / (s1 || 1)), y: t.ay };
-        }
-        r = (p * tot - s1) / (s2 || 1);
-        return { x: t.bx, y: t.ay + (t.by - t.ay) * r };
-      } else {
-        s1 = Math.abs(t.by - t.ay);
-        s2 = Math.abs(t.bx - t.ax);
-        tot = s1 + s2;
-        if (p * tot <= s1) {
-          return { x: t.ax, y: t.ay + (t.by - t.ay) * (p * tot / (s1 || 1)) };
-        }
-        r = (p * tot - s1) / (s2 || 1);
-        return { x: t.ax + (t.bx - t.ax) * r, y: t.by };
-      }
+      if (t.horiz) { s1 = Math.abs(t.bx - t.ax); s2 = Math.abs(t.by - t.ay); tot = s1 + s2; if (p * tot <= s1) { return { x: t.ax + (t.bx - t.ax) * (p * tot / (s1 || 1)), y: t.ay }; } r = (p * tot - s1) / (s2 || 1); return { x: t.bx, y: t.ay + (t.by - t.ay) * r }; }
+      else { s1 = Math.abs(t.by - t.ay); s2 = Math.abs(t.bx - t.ax); tot = s1 + s2; if (p * tot <= s1) { return { x: t.ax, y: t.ay + (t.by - t.ay) * (p * tot / (s1 || 1)) }; } r = (p * tot - s1) / (s2 || 1); return { x: t.ax + (t.bx - t.ax) * r, y: t.by }; }
     }
-
-    /* ── Spawn a signal pulse ────────────────── */
-    function spawnPulse() {
-      if (!traces.length) return;
-      var t = traces[Math.floor(Math.random() * traces.length)];
-      pulses.push({
-        t:    t,
-        p:    0,
-        spd:  rnd(0.003, 0.008),
-        sz:   rnd(1.6, 3.2),
-        col:  t.col
-      });
-    }
-
-    /* ── Animation loop ──────────────────────── */
-    var spawnAcc = 0;
-    var lastTS   = 0;
-
+    function spawnPulse() { if (!traces.length) return; var t = traces[Math.floor(Math.random() * traces.length)]; pulses.push({ t: t, p: 0, spd: rnd(0.003, 0.008), sz: rnd(1.6, 3.2), col: t.col }); }
+    var spawnAcc = 0; var lastTS = 0;
     function frame(ts) {
-      var dt = Math.min((ts - lastTS) * 0.001, 0.05);
-      lastTS = ts;
-
+      var dt = Math.min((ts - lastTS) * 0.001, 0.05); lastTS = ts;
       ctx.clearRect(0, 0, W, H);
-
-      /* static geometry */
       var i;
       for (i = 0; i < traces.length; i++) drawTrace(traces[i]);
-      for (i = 0; i < nodes.length;  i++) drawPad(nodes[i]);
-
-      /* spawn */
+      for (i = 0; i < nodes.length; i++) drawPad(nodes[i]);
       spawnAcc += dt;
       if (spawnAcc > rnd(0.06, 0.16)) { spawnPulse(); spawnAcc = 0; }
       if (pulses.length > 90) pulses.splice(0, pulses.length - 90);
-
-      /* draw pulses */
       for (i = pulses.length - 1; i >= 0; i--) {
-        var pu = pulses[i];
-        pu.p += pu.spd;
+        var pu = pulses[i]; pu.p += pu.spd;
         if (pu.p >= 1.0) { pulses.splice(i, 1); continue; }
-
         var pos = posOnTrace(pu.t, pu.p);
-        var gr  = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, pu.sz * 7);
-        gr.addColorStop(0,   'rgba(' + pu.col + ',0.65)');
-        gr.addColorStop(0.35,'rgba(' + pu.col + ',0.20)');
-        gr.addColorStop(1,   'rgba(' + pu.col + ',0)');
-        ctx.fillStyle = gr;
-        ctx.beginPath();
-        ctx.arc(pos.x, pos.y, pu.sz * 7, 0, 6.283);
-        ctx.fill();
-
-        ctx.fillStyle = 'rgba(' + pu.col + ',0.92)';
-        ctx.beginPath();
-        ctx.arc(pos.x, pos.y, pu.sz * 0.85, 0, 6.283);
-        ctx.fill();
+        var gr = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, pu.sz * 7);
+        gr.addColorStop(0, 'rgba(' + pu.col + ',0.65)'); gr.addColorStop(0.35, 'rgba(' + pu.col + ',0.20)'); gr.addColorStop(1, 'rgba(' + pu.col + ',0)');
+        ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(pos.x, pos.y, pu.sz * 7, 0, 6.283); ctx.fill();
+        ctx.fillStyle = 'rgba(' + pu.col + ',0.92)'; ctx.beginPath(); ctx.arc(pos.x, pos.y, pu.sz * 0.85, 0, 6.283); ctx.fill();
       }
-
       requestAnimationFrame(frame);
     }
-
     window.addEventListener('resize', resize);
     resize();
     requestAnimationFrame(frame);
